@@ -11,6 +11,4 @@ class MailParameterSpec {
 
     }
 
-    def 'check '
-
 }

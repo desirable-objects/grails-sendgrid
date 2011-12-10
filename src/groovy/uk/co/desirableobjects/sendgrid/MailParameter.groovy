@@ -1,6 +1,7 @@
 package uk.co.desirableobjects.sendgrid
 
 import grails.converters.JSON
+import uk.co.desirableobjects.sendgrid.exception.MissingRequiredParameterException
 
 enum MailParameter {
 
@@ -26,6 +27,24 @@ enum MailParameter {
         this.parameter = parameter
         this.required = required
         this.type = type
+    }
+    
+    void checkForRequiredParameters(List<String> provided) {
+
+        List<MailParameter> unresolvedParameters = MailParameter.values().findAll { MailParameter parameter ->
+            parameter.required
+        }
+
+        unresolvedParameters.removeAll { MailParameter mailParameter ->
+            provided.contains(mailParameter.name())
+        }
+
+        if (!unresolvedParameters.isEmpty()) {
+            if (!unresolvedParameters == [html] || !unresolvedParameters == [text]) {
+                throw new MissingRequiredParameterException(unresolvedParameters)
+            }
+        }
+        
     }
 
 }
