@@ -25,8 +25,8 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
-        // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-        // runtime 'mysql:mysql-connector-java:5.1.13'
+        runtime 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.1'
+        test 'org.gmock:gmock:0.8.1'
     }
 
     plugins {
