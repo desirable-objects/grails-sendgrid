@@ -1,6 +1,8 @@
 package uk.co.desirableobjects.sendgrid
 
-class MailParameterSpec {
+import grails.plugin.spock.UnitSpec
+
+class MailParameterSpec extends UnitSpec {
 
     def 'check that required parameters are required'() {
 
