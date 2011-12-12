@@ -4,9 +4,9 @@ import grails.plugin.spock.UnitSpec
 import spock.lang.Shared
 
 import groovyx.net.http.RESTClient
-import grails.converters.JSON
 import uk.co.desirableobjects.sendgrid.exception.MissingCredentialsException
 import spock.lang.Unroll
+import net.sf.json.JSONSerializer
 
 class SendGridApiConnectorServiceSpec extends UnitSpec {
 
@@ -24,7 +24,7 @@ class SendGridApiConnectorServiceSpec extends UnitSpec {
 
         RESTClient.metaClass.post = { Map params ->
             postData = params.body
-            return [data:JSON.parse('{"response":"success"}')]
+            return [data:JSONSerializer.toJSON('{"response":"success"}')]
         }
 
         sendGridApiConnectorService.sendGrid = new RESTClient()
@@ -42,7 +42,7 @@ class SendGridApiConnectorServiceSpec extends UnitSpec {
             """
 
         when:
-            sendGridApiConnectorService.post([:])
+            sendGridApiConnectorService.post(new SendGridEmail())
         
         then:
             postData.api_user == USERNAME
@@ -57,7 +57,7 @@ class SendGridApiConnectorServiceSpec extends UnitSpec {
             mockConfig config
 
         when:
-            sendGridApiConnectorService.post([:])
+            sendGridApiConnectorService.post(new SendGridEmail())
 
         then:
             thrown MissingCredentialsException

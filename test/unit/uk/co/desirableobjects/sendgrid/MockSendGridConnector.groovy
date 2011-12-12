@@ -5,10 +5,10 @@ class MockSendGridConnector extends SendGridApiConnectorService {
     Map lastCall = [:]
 
     @Override
-    def post(Map<String, String> params) {
+    def post(SendGridEmail email) {
         
         lastCall.method = 'post'
-        lastCall.putAll(params)
+        lastCall.putAll(email.toMap())
     }
 
     def propertyMissing(String name) { lastCall[name] }

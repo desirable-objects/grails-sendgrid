@@ -1,16 +1,17 @@
 package uk.co.desirableobjects.sendgrid
 
-import org.codehaus.groovy.grails.web.json.JSONElement
-import grails.converters.JSON
 import grails.plugin.spock.UnitSpec
-import spock.lang.Unroll
+import net.sf.json.JSON
+import net.sf.json.groovy.GJson
+import net.sf.json.JSONObject
+import net.sf.json.JSONSerializer
 
 class SendGridResponseParsingSpec extends UnitSpec {
 
     def 'Parse a success response'() {
 
         given:
-            JSONElement response = JSON.parse('{"message":"success"}')
+            JSON response = JSONSerializer.toJSON('{"message":"success"}')
 
         when:
             SendGridResponse sgResponse = SendGridResponse.parse(response)
@@ -23,7 +24,7 @@ class SendGridResponseParsingSpec extends UnitSpec {
     def 'Parse an error response'() {
 
         given:
-            JSONElement response = JSON.parse('{"message":"error","errors":["error message 1", "error message 2"]}')
+            JSON response = JSONSerializer.toJSON('{"message":"error","errors":["error message 1", "error message 2"]}')
 
         when:
             SendGridResponse sgResponse = SendGridResponse.parse(response)

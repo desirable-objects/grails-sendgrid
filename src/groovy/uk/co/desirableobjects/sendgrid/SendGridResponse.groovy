@@ -1,13 +1,15 @@
 package uk.co.desirableobjects.sendgrid
 
 import org.codehaus.groovy.grails.web.json.JSONElement
+import net.sf.json.JSONObject
+import net.sf.json.JSON
 
 class SendGridResponse {
 
     boolean successful
     List<String> errors
 
-    static SendGridResponse parse(JSONElement response) {
+    static SendGridResponse parse(JSON response) {
 
         boolean success = determineResult(response)
         List<String> errorMessages = parseErrorMessages(response)
@@ -20,7 +22,7 @@ class SendGridResponse {
         return !errors.isEmpty()
     }
 
-    private static boolean determineResult(JSONElement response) {
+    private static boolean determineResult(JSON response) {
         return (response.message == 'success')
     }
 

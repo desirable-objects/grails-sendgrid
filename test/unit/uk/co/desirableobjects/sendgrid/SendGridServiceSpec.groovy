@@ -14,7 +14,12 @@ class SendGridServiceSpec extends UnitSpec {
     @Shared SendGridApiConnectorService api
 
     def setupSpec() {
-        mockConfig ''
+        mockConfig '''
+            sendgrid {
+                username = 'test'
+                password = 'test'
+            }
+        '''
         api = new MockSendGridConnector()
     }
 
@@ -25,7 +30,7 @@ class SendGridServiceSpec extends UnitSpec {
             sendGridService.sendGridApiConnectorService = api
 
         when:
-            sendGridService.send(to: RECIPIENT, subject:SUBJECT, text:MESSAGE_TEXT, from:SENDER)
+            sendGridService.send(new SendGridEmail(recipient: RECIPIENT, subject:SUBJECT, text:MESSAGE_TEXT, sender:SENDER))
 
         then:
             api.method == 'post'
