@@ -1,10 +1,10 @@
 package uk.co.desirableobjects.sendgrid
 
-class SendgridService {
+class SendGridService {
 
     SendGridApiConnectorService sendGridApiConnectorService
 
-    def send(Map<String, Object> email) {
+    def send(SendGridEmail email) {
 
         sendGridApiConnectorService.post(email)
 

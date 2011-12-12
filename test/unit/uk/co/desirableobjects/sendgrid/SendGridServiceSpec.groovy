@@ -10,7 +10,7 @@ class SendGridServiceSpec extends UnitSpec {
     private static final String MESSAGE_TEXT = 'This is a test'
     private static final String SUBJECT = 'Hello there'
 
-    @Shared SendgridService sendgridService
+    @Shared SendGridService sendGridService
     @Shared SendGridApiConnectorService api
 
     def setupSpec() {
@@ -21,11 +21,11 @@ class SendGridServiceSpec extends UnitSpec {
     def 'Send an email'() {
 
         given:
-            sendgridService = new SendgridService()
-            sendgridService.sendGridApiConnectorService = api
+            sendGridService = new SendGridService()
+            sendGridService.sendGridApiConnectorService = api
 
         when:
-            sendgridService.send(to: RECIPIENT, subject:SUBJECT, text:MESSAGE_TEXT, from:SENDER)
+            sendGridService.send(to: RECIPIENT, subject:SUBJECT, text:MESSAGE_TEXT, from:SENDER)
 
         then:
             api.method == 'post'

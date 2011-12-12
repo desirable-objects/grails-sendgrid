@@ -9,7 +9,7 @@ class SendGridApiConnectorService {
 
     private RESTClient sendGrid = new RESTClient(CH.config.sendgrid?.api?.url ?: 'https://sendgrid.com/api/')
 
-    def post(Map<String, String> email) {
+    def post(SendGridEmail email) {
 
         def response = sendGrid.post(
             path: 'mail.send.json',
@@ -27,13 +27,13 @@ class SendGridApiConnectorService {
 
     }
     
-    Map<String, String> prepareParameters(Map<String, String> email) {
+    Map<String, String> prepareParameters(SendGridEmail email) {
 
         if (!CH.config.sendgrid.password || !CH.config.sendgrid.username) {
             throw new MissingCredentialsException()
         }
 
-        Map<String, String> parameters = email
+        Map<String, String> parameters = email.toMap()
         parameters.put('api_user', CH.config.sendgrid?.username)
         parameters.put('api_key', CH.config.sendgrid?.password)
 
