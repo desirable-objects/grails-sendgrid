@@ -13,8 +13,9 @@ class SendGridEmailBuilder {
     static from(String sender) {
         return new SendGridEmailBuilder(sender)
     }
-    
-    SendGridEmailBuilder to(String to) {
+
+    SendGridEmailBuilder to(String toName = null, String to) {
+        email.recipientName = toName
         email.recipient = to
         return this
     }
@@ -35,12 +36,14 @@ class SendGridEmailBuilder {
     }
 
     SendGridEmail build() {
-
-        if (!(this.email.sender && this.email.subject && this.email.recipient && (this.email.text || this.email.html))) {
-            throw new InvalidEmailException(this.email.properties.findAll { !it } )
-        }
-
+        validateRequiredParameters()
         return this.email
+    }
+
+    private validateRequiredParameters() {
+        if (!(this.email.sender && this.email.subject && this.email.recipient && (this.email.text || this.email.html))) {
+            throw new InvalidEmailException(this.email.properties.findAll { !it })
+        }
     }
 
 }

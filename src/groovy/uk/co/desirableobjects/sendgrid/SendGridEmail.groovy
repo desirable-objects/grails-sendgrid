@@ -3,10 +3,17 @@ package uk.co.desirableobjects.sendgrid
 class SendGridEmail {
 
     String recipient
+    String recipientName
     String sender
     String subject
     String text
     String html
+
+    private optionalParameterMappings = [
+            text:'text',
+            html:'html',
+            recipientName:'toname'
+    ]
 
     Map<String, String> toMap() {
 
@@ -16,9 +23,9 @@ class SendGridEmail {
                 subject: subject
         ]
 
-        ['text', 'html'].each { String property ->
-            if (this[property]) {
-                parameters.put(property, this["${property}"] as String)
+        optionalParameterMappings.each { String internalName, String externalName ->
+            if (this[internalName]) {
+                parameters.put(externalName, this[internalName] as String)
             }
         }
 
