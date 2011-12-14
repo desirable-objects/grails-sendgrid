@@ -1,0 +1,24 @@
+Configuration takes place in your application's @Config.groovy@ file.
+
+The basic configuration you will need to use the plugin is:
+
+{code}
+    sendgrid {
+        username = 'your-username'
+        password = 'your-password'
+    }
+{code}
+
+Where your-username and your-password should be replaced with your sendgrid login details.
+
+If you need to override the sengrid API endpoint (such as for development/integration environments, to replace it with a fake 'fixture'), you can do that in the same place:
+
+{code}
+    sendgrid {
+        api.url = 'http://localhost:8080/your-application/fixture/'
+        username = 'your-username'
+        password = 'your-password'
+    }
+{code}
+
+Note that your @fixture@ controller must have the 'mail.send.json' action configured, and sending and receiving @application/json@ content, as this is what the plugin expects to call.

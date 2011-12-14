@@ -1,5 +1,13 @@
 // configuration for plugin testing - will not be included in the plugin zip
- 
+
+grails {
+    doc {
+        authors = 'Antony Jones'
+        license = 'ASL'
+        copyright = '&copy 2012 Desirable Objects Ltd'
+    }
+}
+
 log4j = {
 
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
@@ -15,4 +23,5 @@ log4j = {
            'net.sf.ehcache.hibernate'
 
     warn   'org.mortbay.log'
+
 }

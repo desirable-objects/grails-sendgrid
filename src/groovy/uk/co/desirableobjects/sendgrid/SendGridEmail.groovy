@@ -4,12 +4,12 @@ import grails.converters.JSON
 
 class SendGridEmail {
 
-    String recipient
-    String recipientName
-    String sender
-    String senderName
+    List<String> to = []
+    List<String> toName = []
+    String from
+    String fromName
     String subject
-    String text
+    String body
     String html
     String replyTo
     Date sentDate
@@ -18,13 +18,13 @@ class SendGridEmail {
     Map customHandlingInstructions = [:]
 
     private optionalParameterMappings = [
-            text:'text',
+            body:'text',
             html:'html',
-            recipientName:'toname',
+            toName:'toname',
             bcc:'bcc',
             replyTo:'replyto',
             sentDate:'date',
-            senderName:'fromname',
+            fromName:'fromname',
             headers:'headers',
             customHandlingInstructions:'x-smtpapi'
     ]
@@ -32,8 +32,8 @@ class SendGridEmail {
     Map<String, String> toMap() {
 
         Map<String, String> parameters = [
-                to: recipient,
-                from: sender,
+                to: map(this['to']),
+                from: from,
                 subject: subject
         ]
 
@@ -61,6 +61,10 @@ class SendGridEmail {
 
     private String map(HashMap map) {
         return (map as JSON).toString()
+    }
+    
+    public void setTo(String recipient) {
+        this.to << recipient
     }
 
 }

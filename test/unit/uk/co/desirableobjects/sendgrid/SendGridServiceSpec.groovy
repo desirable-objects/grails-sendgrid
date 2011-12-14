@@ -30,11 +30,11 @@ class SendGridServiceSpec extends UnitSpec {
             sendGridService.sendGridApiConnectorService = api
 
         when:
-            sendGridService.send(new SendGridEmail(recipient: RECIPIENT, subject:SUBJECT, text:MESSAGE_TEXT, sender:SENDER))
+            sendGridService.send(new SendGridEmail(to: RECIPIENT, subject:SUBJECT, body:MESSAGE_TEXT, from:SENDER))
 
         then:
             api.method == 'post'
-            api.to == RECIPIENT
+            api.to == "[\"${RECIPIENT}\"]"
             api.subject == SUBJECT
             api.text == MESSAGE_TEXT
             api.from == SENDER
