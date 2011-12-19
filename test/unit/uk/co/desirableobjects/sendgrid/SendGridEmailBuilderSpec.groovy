@@ -219,4 +219,33 @@ class SendGridEmailBuilderSpec extends UnitSpec {
 
     }
 
+    def 'Builder can add attachments'() {
+
+        given:
+            File file = loadFile('true.png')
+            SendGridEmailBuilder emailBuilder = createBuilder().withText(DEFAULT_TEXT_CONTENT).addAttachment(file)
+
+        expect:
+            SendGridEmail email = emailBuilder.build()
+            email.attachments.size() == 1
+            email.toMap().'files[true.png]' == URLEncoder.encode(file.text)
+
+        when: 'a second file is added'
+            File file2 = loadFile('false.png')
+            emailBuilder.addAttachment(file2)
+            email = emailBuilder.build()
+
+        then:
+            email.attachments.size() == 2
+            email.toMap().keySet().containsAll('files[true.png]', 'files[true.png]')
+
+    }
+
+    private File loadFile(String fileName) {
+
+        URI uri = getClass().getClassLoader().getResource(fileName).toURI()
+        return new File(uri)
+
+    }
+
 }

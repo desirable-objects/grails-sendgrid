@@ -16,6 +16,7 @@ class SendGridEmail {
     List<String> bcc = []
     Map headers = [:]
     Map customHandlingInstructions = [:]
+    List<File> attachments = []
 
     private optionalParameterMappings = [
             body:'text',
@@ -37,14 +38,35 @@ class SendGridEmail {
                 subject: subject
         ]
 
+        parameters.putAll(encodeOptionalParameters())
+        parameters.putAll(addAttachments())
+
+        return parameters
+
+    }
+    
+    private Map<String, String> encodeOptionalParameters() {
+        
+        Map<String, String> parameters = [:]
+        
         optionalParameterMappings.each { String internalName, String externalName ->
             if (this[internalName]) {
                 parameters.put(externalName, map(this[internalName]))
             }
         }
+        
+        return parameters
+    }
+    
+    private Map<String, String> addAttachments() {
+        
+        Map<String, String> parameters = [:]
+        
+        attachments.each { File attachment ->
+            parameters.put("files[${attachment.name}]" as String, URLEncoder.encode(attachment.text))
+        }
 
         return parameters
-
     }
 
     private String map(String string) {

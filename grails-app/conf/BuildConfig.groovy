@@ -8,7 +8,9 @@ grails.project.dependency.resolution = {
     inherits("global") {
 
     }
+
     log "warn"
+
     repositories {
         grailsPlugins()
         grailsHome()
@@ -31,7 +33,7 @@ grails.project.dependency.resolution = {
             export = false
         }
         
-        build ':release:1.0.0.RC3', {
+        build ':release:1.0.0', {
             export = false
         }
 

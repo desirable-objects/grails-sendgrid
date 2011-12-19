@@ -66,6 +66,11 @@ class SendGridEmailBuilder {
         return this
     }
 
+    SendGridEmailBuilder addAttachment(File file) {
+        email.attachments << file
+        return this
+    }
+
     SendGridEmail build() {
         validateRequiredParameters()
         return this.email
