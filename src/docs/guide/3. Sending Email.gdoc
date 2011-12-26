@@ -1,0 +1,51 @@
+In a pinch, you can send email using the SendGridService in one of three ways:
+
+1. Using any controller's built-in sendMail method, and passing your email details to it.
+
+ > Note: This is the grails-mail way of doing things, and should always be your preferred method to allow for quick and easy interchange of any grails-supported mail plugin.
+
+ > Note: Not yet implemented!
+
+{code}
+sendMail {
+     from 'antony@example.com'
+     to 'aiten@example.net'
+     to 'wirah@example.org'
+     bcc 'yourbcc@example.com'
+     subject 'This is the subject line'
+     body 'This is our message body'
+}
+{code}
+
+2. Using the sendMail closure from any class which has a reference to the SendGridService.
+
+As above, but referencing the sendMail method of the SendGridService directly:
+
+{code}
+sendGridService.sendMail {
+    ...
+}
+{code}
+
+3. Using the email builder
+
+This is useful when you might want a more programmatic approach to sending email.
+
+{code}
+SendGridEmail email = new SendGridEmailBuilder()
+                        .from('antony@example.com')
+                        .to('aiten@example.net')
+                        .subject('This is the subject line')
+                        .withText('This is our message body')
+                        .build()
+{code}
+
+When you've built your email, pass it to the SendGridService's send method:
+
+{code}
+sendGridService.send(email)
+{code}
+
+The email builder is written as a natural-language type DSL, so you might find that there is more than one way to build your email, but under the covers, they are exactly the same.
+
+ > Note: Not yet documented!
