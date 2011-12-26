@@ -10,4 +10,16 @@ class SendGridService {
 
     }
 
+    def sendMail(Closure closure) {
+
+        SendGridSendMailDSLDelegate delegate = new SendGridSendMailDSLDelegate()
+
+        closure.delegate = delegate
+        closure.resolveStrategy = Closure.DELEGATE_ONLY
+        closure.call()
+
+        send(delegate.build())
+
+    }
+
 }

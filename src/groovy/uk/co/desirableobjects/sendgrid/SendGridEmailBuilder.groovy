@@ -6,12 +6,14 @@ class SendGridEmailBuilder {
 
     private SendGridEmail email
 
-    private SendGridEmailBuilder(String senderName, String sender) {
-        this.email = new SendGridEmail(fromName: senderName, from: sender)
+    SendGridEmailBuilder() {
+        this.email = new SendGridEmail()
     }
-    
-    static from(String senderName = null, String sender) {
-        return new SendGridEmailBuilder(senderName, sender)
+
+    SendGridEmailBuilder from(String senderName = null, String sender) {
+        email.fromName = senderName
+        email.from = sender
+        return this
     }
 
     SendGridEmailBuilder to(String toName = null, String to) {
@@ -76,10 +78,16 @@ class SendGridEmailBuilder {
         return this.email
     }
 
-    // TODO: Non verbose error message!
     private validateRequiredParameters() {
-        if (!(this.email.from && this.email.subject && this.email.to && (this.email.body || this.email.html))) {
-            throw new InvalidEmailException([])
+
+        ['to', 'subject', 'from'].each { String field ->
+            if (!this.email[field]) {
+                throw new InvalidEmailException([field])
+            }
+        }
+
+        if (!(this.email.body || this.email.html)) {
+            throw new InvalidEmailException(['body', 'html'])
         }
     }
 

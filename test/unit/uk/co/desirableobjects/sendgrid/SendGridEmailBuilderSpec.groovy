@@ -24,7 +24,7 @@ class SendGridEmailBuilderSpec extends UnitSpec {
     private static final String EXAMPLE_SUBJECT = 'Hello There'
 
     SendGridEmailBuilder createBuilder() {
-        return SendGridEmailBuilder.from(SENDER_EMAIL).to(RECIPIENT_EMAIL).subject(EXAMPLE_SUBJECT)
+        return new SendGridEmailBuilder().from(SENDER_EMAIL).to(RECIPIENT_EMAIL).subject(EXAMPLE_SUBJECT)
     }
 
     def "Builder can build emails"() {
@@ -60,9 +60,9 @@ class SendGridEmailBuilderSpec extends UnitSpec {
 
         where:
             email << [
-                    SendGridEmailBuilder.from(SENDER_EMAIL).to(RECIPIENT_EMAIL).subject(EXAMPLE_SUBJECT),
-                    SendGridEmailBuilder.from(SENDER_EMAIL).to(RECIPIENT_EMAIL).withText(DEFAULT_TEXT_CONTENT),
-                    SendGridEmailBuilder.from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withText(DEFAULT_TEXT_CONTENT)
+                    new SendGridEmailBuilder().from(SENDER_EMAIL).to(RECIPIENT_EMAIL).subject(EXAMPLE_SUBJECT),
+                    new SendGridEmailBuilder().from(SENDER_EMAIL).to(RECIPIENT_EMAIL).withText(DEFAULT_TEXT_CONTENT),
+                    new SendGridEmailBuilder().from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withText(DEFAULT_TEXT_CONTENT)
             ]
 
     }
@@ -70,32 +70,29 @@ class SendGridEmailBuilderSpec extends UnitSpec {
     def 'Builder can take a recipient with a display name'() {
 
         given:
-            SendGridEmailBuilder builder = SendGridEmailBuilder.from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML)
+            SendGridEmailBuilder builder = new SendGridEmailBuilder().from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML)
 
         when:
             SendGridEmail email = builder.to(RECIPIENT_EMAIL).build()
             Map emailParameters = email.toMap()
 
         then:
-            email.to == [RECIPIENT_EMAIL]
-            emailParameters.to == "[\"${RECIPIENT_EMAIL}\"]"
+            email.to == emailParameters.to == [RECIPIENT_EMAIL]
 
         when:
-            email = SendGridEmailBuilder.from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML).to(RECIPIENT_NAME, RECIPIENT_EMAIL).build()
+            email = new SendGridEmailBuilder().from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML).to(RECIPIENT_NAME, RECIPIENT_EMAIL).build()
             emailParameters = email.toMap()
 
         then:
-            email.to == [RECIPIENT_EMAIL]
-            email.toName == [RECIPIENT_NAME]
-            emailParameters.to == "[\"${RECIPIENT_EMAIL}\"]"
-            emailParameters.toname == "[\"${RECIPIENT_NAME}\"]"
+            email.to == emailParameters.to == [RECIPIENT_EMAIL]
+            email.toName == emailParameters.toname == [RECIPIENT_NAME]
 
     }
 
     def 'Builder can take multiple recipients'() {
 
         given:
-            SendGridEmailBuilder builder = SendGridEmailBuilder.from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML)
+            SendGridEmailBuilder builder = new SendGridEmailBuilder().from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML)
 
         when:
             SendGridEmail email = builder.to(RECIPIENT_EMAIL).addRecipient(ADDITIONAL_RECIPIENT_EMAIL).build()
@@ -103,19 +100,19 @@ class SendGridEmailBuilderSpec extends UnitSpec {
 
         then:
             email.to == [RECIPIENT_EMAIL, ADDITIONAL_RECIPIENT_EMAIL]
-            emailParameters.to == "[\"${RECIPIENT_EMAIL}\",\"${ADDITIONAL_RECIPIENT_EMAIL}\"]"
+            emailParameters.to == [RECIPIENT_EMAIL, ADDITIONAL_RECIPIENT_EMAIL]
             !emailParameters.containsKey('toname')
 
         when:
-            email = SendGridEmailBuilder.from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML)
+            email = new SendGridEmailBuilder().from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML)
                     .to(RECIPIENT_NAME, RECIPIENT_EMAIL).addRecipient(ADDITIONAL_RECIPIENT_NAME, ADDITIONAL_RECIPIENT_EMAIL).build()
             emailParameters = email.toMap()
 
         then:
             email.to == [RECIPIENT_EMAIL, ADDITIONAL_RECIPIENT_EMAIL]
+            emailParameters.to == [RECIPIENT_EMAIL, ADDITIONAL_RECIPIENT_EMAIL]
             email.toName == [RECIPIENT_NAME, ADDITIONAL_RECIPIENT_NAME]
-            emailParameters.to == "[\"${RECIPIENT_EMAIL}\",\"${ADDITIONAL_RECIPIENT_EMAIL}\"]"
-            emailParameters.toname == "[\"${RECIPIENT_NAME}\",\"${ADDITIONAL_RECIPIENT_NAME}\"]"
+            emailParameters.toname == [RECIPIENT_NAME, ADDITIONAL_RECIPIENT_NAME]
 
     }
 
@@ -134,7 +131,7 @@ class SendGridEmailBuilderSpec extends UnitSpec {
             emailParameters.from == SENDER_EMAIL
 
         when:
-            email = SendGridEmailBuilder.from(SENDER_NAME, SENDER_EMAIL).to(RECIPIENT_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML).build()
+            email = new SendGridEmailBuilder().from(SENDER_NAME, SENDER_EMAIL).to(RECIPIENT_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML).build()
             emailParameters = email.toMap()
 
         then:
@@ -153,14 +150,14 @@ class SendGridEmailBuilderSpec extends UnitSpec {
 
         expect:
             email.bcc == [BCC_RECIPIENT]
-            email.toMap().bcc == "[\"${BCC_RECIPIENT}\"]"
+            email.toMap().bcc == [BCC_RECIPIENT]
         
         when:
             email = createBuilder().withText(DEFAULT_TEXT_CONTENT).addBcc(BCC_RECIPIENT).addBcc(ANOTHER_BCC_RECIPIENT).build()
 
         then:
             email.bcc == [BCC_RECIPIENT, ANOTHER_BCC_RECIPIENT]
-            email.toMap().bcc == "[\"${BCC_RECIPIENT}\",\"${ANOTHER_BCC_RECIPIENT}\"]"
+            email.toMap().bcc == [BCC_RECIPIENT, ANOTHER_BCC_RECIPIENT]
 
     }
 
@@ -177,7 +174,7 @@ class SendGridEmailBuilderSpec extends UnitSpec {
             email.sentDate == sentDate
 
         and:
-            emailParameters.bcc == "[\"${BCC_RECIPIENT}\"]"
+            emailParameters.bcc == [BCC_RECIPIENT]
             emailParameters.replyto == REPLY_TO_RECIPIENT
             emailParameters.date == sentDate.format("yyyy-MM-dd'T'HH:mm:ssz")
 

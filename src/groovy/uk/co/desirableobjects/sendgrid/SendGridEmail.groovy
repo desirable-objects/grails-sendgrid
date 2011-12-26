@@ -18,7 +18,10 @@ class SendGridEmail {
     Map customHandlingInstructions = [:]
     List<File> attachments = []
 
-    private optionalParameterMappings = [
+    private allParameters = [
+            to:'to',
+            from:'from',
+            subject:'subject',
             body:'text',
             html:'html',
             toName:'toname',
@@ -30,34 +33,31 @@ class SendGridEmail {
             customHandlingInstructions:'x-smtpapi'
     ]
 
-    Map<String, String> toMap() {
+    Map<String, Object> toMap() {
 
-        Map<String, String> parameters = [
-                to: map(this['to']),
-                from: from,
-                subject: subject
-        ]
+        Map<String, Object> parameters = [:]
 
-        parameters.putAll(encodeOptionalParameters())
+        parameters.putAll(encodeParameters())
         parameters.putAll(addAttachments())
 
         return parameters
 
     }
     
-    private Map<String, String> encodeOptionalParameters() {
+    private Map<String, Object> encodeParameters() {
         
-        Map<String, String> parameters = [:]
+        Map<String, Object> parameters = [:]
         
-        optionalParameterMappings.each { String internalName, String externalName ->
-            if (this[internalName]) {
-                parameters.put(externalName, map(this[internalName]))
+        allParameters.each { String internalName, String externalName ->
+            Object value = this[internalName]
+            if (value) {
+                parameters.put(externalName, map(value))
             }
         }
         
         return parameters
     }
-    
+
     private Map<String, String> addAttachments() {
         
         Map<String, String> parameters = [:]
@@ -69,12 +69,12 @@ class SendGridEmail {
         return parameters
     }
 
-    private String map(String string) {
-        return string
+    private List<String> map(List<String> values) {
+        return values
     }
 
-    private String map(List<String> list) {
-        return "[\"${list.join("\",\"")}\"]"
+    private String map(String string) {
+        return string
     }
 
     private String map(Date date) {
