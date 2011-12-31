@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>3 Sending Email 0.2</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
+    <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
+    <script type="text/javascript">
+function addJsClass() {
+    var classes = document.body.className.split(" ");
+    classes.push("js");
+    document.body.className = classes.join(" ");
+}
+    </script>
+</head>
+
+<body class="body" onload="addJsClass();">
+<div id="navigation">
+    <ul>
+        <li>
+            <div id="nav-summary" onmouseover="toggleNavSummary(false)" onmouseout="toggleNavSummary(true)">
+                <a href="../guide/index.html" class="button">Table of contents</a>
+
+                <div id="nav-summary-childs" style="display:none;">
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/1.%20Introduction.html"><strong>1</strong><span>Introduction</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/2.%20Configuration.html"><strong>2</strong><span>Configuration</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/3.%20Sending%20Email.html"><strong>3</strong><span>Sending Email</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/4.%20Known%20Issues.html"><strong>4</strong><span>Known Issues</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/5.%20Changelog.html"><strong>5</strong><span>Changelog</span></a>
+                    </div>
+                    
+                </div>
+            </div>
+        </li>
+        <li class="separator selected">
+            <a id="ref-button" onclick="localToggle(); return false;" href="#">Quick Reference</a>
+        </li>
+    </ul>
+</div>
+<div id="header">
+    <div class="images clearfix">
+        
+        
+    </div>
+    <p>Allows the sending of Email via SendGrid's services</p>
+</div>
+
+
+<table id="colset" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td id="col1">
+            <div id="main" class="corner-all">
+
+                
+                    <div class="toc-item prev-left"><a href="../guide/2.%20Configuration.html">&lt;&lt; <strong>2</strong><span>Configuration</span></a></div>
+                
+
+                <span id='toggle-col1' class="toggle">(<a href="#" onclick="localToggle(); return false;">Quick Reference</a>)</span>
+
+                
+                    <div class="toc-item next-right"><a href="../guide/4.%20Known%20Issues.html"><strong>4</strong><span>Known Issues</span> >></a></div>
+                
+
+
+                <div class="project">
+                    <h1>3 Sending Email - Reference Documentation</h1>
+
+                    <p><strong>Authors:</strong> Antony Jones</p>
+
+                    <p><strong>Version:</strong> 0.2</p>
+
+                    
+                </div>
+
+                
+
+                
+
+<h1 id="3. Sending Email">3 Sending Email</h1>
+In a pinch, you can send email using the SendGridService in one of three ways:
+<ol>
+<li>Using any controller's built-in sendMail method, and passing your email details to it.</li>
+</ol><p class="paragraph"/> &#62; Note: This is the grails-mail way of doing things, and should always be your preferred method to allow for quick and easy interchange of any grails-supported mail plugin.<p class="paragraph"/> &#62; Note: Not yet implemented!<p class="paragraph"/><div class="code"><pre>sendMail &#123;
+     from 'antony@example.com'
+     to 'aiten@example.net'
+     to 'wirah@example.org'
+     bcc 'yourbcc@example.com'
+     subject 'This is the subject line'
+     body 'This is our message body'
+&#125;</pre></div><p class="paragraph"/>2. Using the sendMail closure from any class which has a reference to the SendGridService.<p class="paragraph"/>As above, but referencing the sendMail method of the SendGridService directly:<p class="paragraph"/><div class="code"><pre>sendGridService.sendMail &#123;
+    &#8230;
+&#125;</pre></div><p class="paragraph"/>3. Using the email builder<p class="paragraph"/>This is useful when you might want a more programmatic approach to sending email.<p class="paragraph"/><div class="code"><pre>SendGridEmail email = <span class="java&#45;keyword">new</span> SendGridEmailBuilder()
+                        .from('antony@example.com')
+                        .to('aiten@example.net')
+                        .subject('This is the subject line')
+                        .withText('This is our message body')
+                        .build()</pre></div><p class="paragraph"/>When you've built your email, pass it to the SendGridService's send method:<p class="paragraph"/><div class="code"><pre>sendGridService.send(email)</pre></div><p class="paragraph"/>The email builder is written as a natural-language type DSL, so you might find that there is more than one way to build your email, but under the covers, they are exactly the same.<p class="paragraph"/>4. Optional email parameters and advanced sending instructions<p class="paragraph"/><table class="wiki-table" cellpadding="0" cellspacing="0" border="0"><tr><th><strong class="bold">Option</strong></th><th><strong class="bold">Builder Syntax</strong></th><th><strong class="bold">sendMail { } Syntax</strong></th><th><strong class="bold">Parameter types</strong></th><th><strong class="bold">Can be called more than once</strong></th><th><strong class="bold">Required</strong></th></tr><tr class="table-odd"><td>Recipient</td><td><div class="code"><pre>.to('email@example.com')</pre></div></td><td><div class="code"><pre>to 'email@example.com'</pre></div></td><td>String</td><td>Yes</td><td>Yes</td></tr><tr class="table-even"><td>Recipient display name with email address</td><td><div class="code"><pre>.to('Antony Jones', 'email@example.com')</pre></div> or <div class="code"><pre>.addRecipient('Antony Jones', 'email@example.com')</pre></div></td><td><code>not implemented</code></td><td>String, String</td><td>Yes</td><td>No</td></tr><tr class="table-odd"><td>Sender</td><td><div class="code"><pre>.from('email@example.com')</pre></div></td><td><div class="code"><pre>from 'email@example.com'</pre></div></td><td>String</td><td>No</td><td>Yes</td></tr><tr class="table-even"><td>Sender display name with email address</td><td><div class="code"><pre>.from('Antony Jones', 'email<code>example.com')</pre></div></td><td></code>not implemented@</td><td>String, String</td><td>No</td><td>No</td></tr><tr class="table-odd"><td>Reply-to address</td><td><div class="code"><pre>.replyTo('email@example.com')</pre></div></td><td><div class="code"><pre>replyTo 'email@example.com'</pre></div></td><td>String</td><td>No</td><td>No</td></tr><tr class="table-even"><td>Sent date</td><td><div class="code"><pre>.sentDate(<span class="java&#45;keyword">new</span> Date())</pre></div></td><td><div class="code"><pre>sentDate <span class="java&#45;keyword">new</span> Date()</pre></div></td><td>Date</td><td>No</td><td>No</td></tr><tr class="table-odd"><td>Subject</td><td><div class="code"><pre>.subject('Your subject line')</pre></div></td><td><div class="code"><pre>subject 'Your subject line'</pre></div></td><td>String</td><td>No</td><td>Yes</td></tr><tr class="table-even"><td>Blind Carbon-copy</td><td><div class="code"><pre>.addBcc('email@example.com')</pre></div></td><td><div class="code"><pre>bcc 'email@example.com'</pre></div></td><td>String</td><td>Yes</td><td>Yes</td></tr><tr class="table-odd"><td>Body text</td><td><div class="code"><pre>.text('Your message text')</pre></div></td><td><div class="code"><pre>body 'Your message text'</pre></div></td><td>String</td><td>No</td><td>Yes (one of text or html)</td></tr><tr class="table-even"><td>Body html</td><td><div class="code"><pre>.html('&#60;h2&#62;Your message html&#60;/h2&#62;')</pre></div></td><td><div class="code"><pre>html '&#60;h2&#62;Your message html&#60;/h2&#62;'</pre></div></td><td>String</td><td>No</td><td>Yes (one of text or html)</td></tr><tr class="table-odd"><td>Custom <a href="http://docs.sendgrid.com/documentation/api/smtp-api/" target="blank">handling instruction</a></td><td><div class="code"><pre>.addCustomHandlingInstruction('headerName', 'headerValue')</pre></div></td><td><div class="code"><pre>addCustomHandlingInstruction 'headerName', 'headerValue'</pre></div></td><td>String, String</td><td>Yes</td><td>No</td></tr><tr class="table-even"><td>Header</td><td><div class="code"><pre>.addHeader('headerName', 'headerValue')</pre></div></td><td><div class="code"><pre>addHeader 'headerName', 'headerValue'</pre></div></td><td>String, String</td><td>Yes</td><td>No</td></tr><tr class="table-odd"><td>Attachments</td><td><div class="code"><pre>.addAttachment(<span class="java&#45;keyword">new</span> File('/tmp/your.file'))</pre></div></td><td><div class="code"><pre>attach <span class="java&#45;keyword">new</span> File('/tmp/your.file')</pre></div></td><td>File</td><td>Yes</td><td>No</td></tr></table><p class="paragraph"/>For further details, see the sendgrid api <a href="http://docs.sendgrid.com/documentation/api/web-api/mail/" target="blank"></a><p class="paragraph"/>&#62; Note: attachments are not yet working.
+
+
+                <div style="clear:both;margin-top:15px;"></div>
+                
+                    <div class="toc-item prev-left"><a href="../guide/2.%20Configuration.html">&lt;&lt; <strong>2</strong><span>Configuration</span></a></div>
+                
+                    <div class="toc-item next-right"><a href="../guide/4.%20Known%20Issues.html"><strong>4</strong><span>Known Issues</span> >></a></div>
+                
+                <div style="clear:both"></div>
+            </div>
+        </td>
+        <td id="col2">
+            <div class="local clearfix">
+                <div class="local-title">
+                    <a href="../guide/index.html" target="mainFrame">Quick Reference</a>
+                    <span class="toggle">(<a href="#" onclick="localToggle(); return false;">hide</a>)</span>
+                </div>
+                <div class="menu">
+                    
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div id="footer">
+    &copy 2012 Desirable Objects Ltd
+    
+</div>
+
+<script type="text/javascript" src="../js/docs.js"></script>
+
+</body>
+</html>
