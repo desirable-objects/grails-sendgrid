@@ -1,0 +1,12 @@
+Changelog
+
+2011-12-31 - 0.2
+
+* Changed the syntax of the builder to more closely match the grails-mail plugin
+* Added sendMail { } in controllers
+* Fixed an issue whereby the groovy RESTClient was posting invalid requests
+* Added documentation!
+
+2011-12-01 - 0.1
+
+* Initial release

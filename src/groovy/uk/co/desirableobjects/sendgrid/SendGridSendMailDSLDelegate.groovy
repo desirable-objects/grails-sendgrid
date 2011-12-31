@@ -29,4 +29,8 @@ class SendGridSendMailDSLDelegate {
         return builder.addBcc(bccEmail)
     }
 
+    SendGridEmailBuilder attach(File attachment) {
+        return builder.addAttachment(attachment)
+    }
+
 }

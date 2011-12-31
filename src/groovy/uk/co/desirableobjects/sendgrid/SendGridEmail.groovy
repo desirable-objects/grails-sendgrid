@@ -1,6 +1,8 @@
 package uk.co.desirableobjects.sendgrid
 
 import grails.converters.JSON
+import org.apache.commons.codec.binary.Base64
+import org.apache.commons.codec.net.URLCodec
 
 class SendGridEmail {
 
@@ -58,12 +60,12 @@ class SendGridEmail {
         return parameters
     }
 
-    private Map<String, String> addAttachments() {
+    private Map<String, Object> addAttachments() {
         
-        Map<String, String> parameters = [:]
+        Map<String, Object> parameters = [:]
         
         attachments.each { File attachment ->
-            parameters.put("files[${attachment.name}]" as String, URLEncoder.encode(attachment.text))
+            parameters.put("files[${attachment.name}]" as String, new String(attachment.bytes))
         }
 
         return parameters

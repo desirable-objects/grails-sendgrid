@@ -48,4 +48,25 @@ sendGridService.send(email)
 
 The email builder is written as a natural-language type DSL, so you might find that there is more than one way to build your email, but under the covers, they are exactly the same.
 
- > Note: Not yet documented!
+4. Optional email parameters and advanced sending instructions
+
+{table}
+*Option* | *Builder Syntax* | *sendMail { } Syntax* | *Parameter types* | *Can be called more than once* | *Required*
+Recipient | {code}.to('email@example.com'){code} | {code}to 'email@example.com'{code} | String | Yes | Yes
+Recipient display name with email address | {code}.to('Antony Jones', 'email@example.com'){code} or {code}.addRecipient('Antony Jones', 'email@example.com'){code} | @not implemented@ | String, String | Yes | No
+Sender | {code}.from('email@example.com'){code} | {code}from 'email@example.com'{code} | String | No | Yes
+Sender display name with email address | {code}.from('Antony Jones', 'email@example.com'){code} | @not implemented@ | String, String | No | No
+Reply-to address | {code}.replyTo('email@example.com'){code} | {code}replyTo 'email@example.com'{code} | String | No | No
+Sent date | {code}.sentDate(new Date()){code} | {code}sentDate new Date(){code} | Date | No | No
+Subject | {code}.subject('Your subject line'){code} | {code}subject 'Your subject line'{code} | String | No | Yes
+Blind Carbon-copy | {code}.addBcc('email@example.com'){code} | {code} bcc 'email@example.com'{code} | String | Yes | Yes
+Body text | {code}.text('Your message text'){code} | {code}body 'Your message text'{code} | String | No | Yes (one of text or html)
+Body html | {code}.html('<h2>Your message html</h2>'){code} | {code}html '<h2>Your message html</h2>'{code} | String | No | Yes (one of text or html)
+Custom [handling instruction|http://docs.sendgrid.com/documentation/api/smtp-api/] | {code}.addCustomHandlingInstruction('headerName', 'headerValue'){code} | {code}addCustomHandlingInstruction 'headerName', 'headerValue'{code} | String, String | Yes | No
+Header | {code}.addHeader('headerName', 'headerValue'){code} | {code}addHeader 'headerName', 'headerValue'{code} | String, String | Yes | No
+Attachments | {code}.addAttachment(new File('/tmp/your.file')){code} | {code}attach new File('/tmp/your.file'){code} | File | Yes | No
+{table}
+
+For further details, see the sendgrid api [http://docs.sendgrid.com/documentation/api/web-api/mail/]
+
+> Note: attachments are not yet working.

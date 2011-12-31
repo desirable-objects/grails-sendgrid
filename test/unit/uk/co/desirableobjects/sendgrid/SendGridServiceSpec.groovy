@@ -84,19 +84,42 @@ class SendGridServiceSpec extends UnitSpec {
     def 'Send a text email with multiple recipients'() {
 
         when:
-        sendGridService.sendMail {
-            to this.RECIPIENT, this.RECIPIENT2
-            from this.SENDER
-            subject this.SUBJECT
-            body this.MESSAGE_TEXT
-        }
+            sendGridService.sendMail {
+                to this.RECIPIENT, this.RECIPIENT2
+                from this.SENDER
+                subject this.SUBJECT
+                body this.MESSAGE_TEXT
+            }
 
         then:
-        api.method == 'post'
-        api.to == [RECIPIENT, RECIPIENT2]
-        api.subject == SUBJECT
-        api.text == MESSAGE_TEXT
-        api.from == SENDER
+            api.method == 'post'
+            api.to == [RECIPIENT, RECIPIENT2]
+            api.subject == SUBJECT
+            api.text == MESSAGE_TEXT
+            api.from == SENDER
+
+    }
+
+    def 'Send an email with attachments'() {
+
+        when:
+            sendGridService.sendMail {
+                to this.RECIPIENT, this.RECIPIENT2
+                from this.SENDER
+                subject this.SUBJECT
+                body this.MESSAGE_TEXT
+                attach new File('./test/unit/true.png')
+            }
+
+        then:
+            api.method == 'post'
+            api.to == [RECIPIENT, RECIPIENT2]
+            api.subject == SUBJECT
+            api.text == MESSAGE_TEXT
+            api.from == SENDER
+            api."files[true.png]" == URLEncoder.encode(new File('./test/unit/true.png').text)
+
+
 
     }
 

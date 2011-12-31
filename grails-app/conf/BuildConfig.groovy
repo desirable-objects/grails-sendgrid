@@ -18,20 +18,19 @@ grails.project.dependency.resolution = {
 
         mavenLocal(null)
         mavenCentral()
+        mavenRepo 'http://repo.desirableobjects.co.uk'
     }
 
     dependencies {
         runtime 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.1', {
-            excludes 'xml-apis'
+            excludes 'xml-apis', 'groovy'
         }
-        test 'org.gmock:gmock:0.8.1'
+        test 'org.gmock:gmock:0.8.2'
     }
 
     plugins {
 
-        test ':spock:0.5-groovy-1.7', {
-            export = false
-        }
+        test ':spock:0.6-SNAPSHOT'
         
         build ':release:1.0.0', {
             export = false
