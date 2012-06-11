@@ -50,8 +50,8 @@ class SendGridApiConnectorServiceSpec extends UnitSpec {
 
     }
 
-    @Unroll('No authentication configured (configuration was #config)')
-    def 'No authentication configured'() {
+    @Unroll
+    def 'No authentication configured [configuration was #config]'() {
 
         given:
             mockConfig config
@@ -67,8 +67,8 @@ class SendGridApiConnectorServiceSpec extends UnitSpec {
 
     }
 
-    @Unroll('Configuration #config overrides API URL to be #expectedUri')
-    def 'API URL can be overriden by config'() {
+    @Unroll
+    def 'Configuration #config overrides API URL to be #expectedUri'() {
 
         given:
             mockConfig config

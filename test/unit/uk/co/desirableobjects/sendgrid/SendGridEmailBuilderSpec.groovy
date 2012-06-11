@@ -6,6 +6,7 @@ import uk.co.desirableobjects.sendgrid.exception.InvalidEmailException
 
 import grails.converters.JSON
 import grails.plugin.spock.UnitSpec
+import spock.lang.Ignore
 
 
 class SendGridEmailBuilderSpec extends UnitSpec {
@@ -49,8 +50,8 @@ class SendGridEmailBuilderSpec extends UnitSpec {
 
     }
 
-    @Unroll('Builder attempts to build invalid email combination #email')
-    def "Builder cannot build invalid emails"() {
+    @Unroll
+    def "Builder attempts to build invalid email combination #email"() {
 
         when:
             email.build()
@@ -77,15 +78,18 @@ class SendGridEmailBuilderSpec extends UnitSpec {
             Map emailParameters = email.toMap()
 
         then:
-            email.to == emailParameters.to == [RECIPIENT_EMAIL]
+            email.to == [RECIPIENT_EMAIL]
+            emailParameters.to == [RECIPIENT_EMAIL]
 
         when:
             email = new SendGridEmailBuilder().from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML).to(RECIPIENT_NAME, RECIPIENT_EMAIL).build()
             emailParameters = email.toMap()
 
         then:
-            email.to == emailParameters.to == [RECIPIENT_EMAIL]
-            email.toName == emailParameters.toname == [RECIPIENT_NAME]
+            email.to == [RECIPIENT_EMAIL]
+            emailParameters.to == [RECIPIENT_EMAIL]
+            email.toName == [RECIPIENT_NAME]
+            emailParameters.toname == [RECIPIENT_NAME]
 
     }
 
@@ -142,7 +146,6 @@ class SendGridEmailBuilderSpec extends UnitSpec {
 
     }
 
-    // TODO: BCC is an array? Explain!
     def 'Builder can add Bccs'() {
 
         given:
@@ -216,6 +219,7 @@ class SendGridEmailBuilderSpec extends UnitSpec {
 
     }
 
+    @Ignore
     def 'Builder can add attachments'() {
 
         given:

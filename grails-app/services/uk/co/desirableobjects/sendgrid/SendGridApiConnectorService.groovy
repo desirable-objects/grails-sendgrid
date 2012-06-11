@@ -12,16 +12,12 @@ class SendGridApiConnectorService {
 
     def post(SendGridEmail email) {
 
-        try {
-            def response = sendGrid.post(
-                path: 'mail.send.json',
-                body: prepareParameters(email),
-                requestContentType: ContentType.URLENC,
-            )
-            handle(response)
-        } catch (HttpResponseException hre) {
-            println hre.response.data
-        }
+        def response = sendGrid.post(
+            path: 'mail.send.json',
+            body: prepareParameters(email),
+            requestContentType: ContentType.URLENC,
+        )
+        handle(response)
 
     }
     

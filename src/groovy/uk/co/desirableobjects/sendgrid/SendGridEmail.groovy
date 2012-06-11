@@ -1,8 +1,6 @@
 package uk.co.desirableobjects.sendgrid
 
 import grails.converters.JSON
-import org.apache.commons.codec.binary.Base64
-import org.apache.commons.codec.net.URLCodec
 
 class SendGridEmail {
 

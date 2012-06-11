@@ -2,6 +2,7 @@ package uk.co.desirableobjects.sendgrid
 
 import grails.plugin.spock.UnitSpec
 import spock.lang.Shared
+import spock.lang.Ignore
 
 class SendGridServiceSpec extends UnitSpec {
 
@@ -100,6 +101,7 @@ class SendGridServiceSpec extends UnitSpec {
 
     }
 
+    @Ignore
     def 'Send an email with attachments'() {
 
         when:

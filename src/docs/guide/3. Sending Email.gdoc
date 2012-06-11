@@ -70,3 +70,4 @@ Attachments | {code}.addAttachment(new File('/tmp/your.file')){code} | {code}att
 For further details, see the sendgrid api [http://docs.sendgrid.com/documentation/api/web-api/mail/]
 
 > Note: attachments are not yet working.
+
