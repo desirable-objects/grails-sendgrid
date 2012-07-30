@@ -219,6 +219,24 @@ class SendGridEmailBuilderSpec extends UnitSpec {
 
     }
 
+    def 'Builder can add Custom handling instructions which are maps'() {
+
+        given:
+            SendGridEmail email = createBuilder().withText(DEFAULT_TEXT_CONTENT).addCustomHandlingInstruction('my-header', [peas:'pods']).build()
+
+        expect:
+            email.customHandlingInstructions == ['my-header': [peas: 'pods']]
+            email.toMap().'x-smtpapi' == (email.customHandlingInstructions as JSON).toString()
+
+        when:
+            email = createBuilder().withText(DEFAULT_TEXT_CONTENT).addCustomHandlingInstruction('a', '1').addCustomHandlingInstruction('b', '2').build()
+
+        then:
+            email.customHandlingInstructions == [a:'1', b:'2']
+            email.toMap().'x-smtpapi' == (email.customHandlingInstructions as JSON).toString()
+
+    }
+
     @Ignore
     def 'Builder can add attachments'() {
 

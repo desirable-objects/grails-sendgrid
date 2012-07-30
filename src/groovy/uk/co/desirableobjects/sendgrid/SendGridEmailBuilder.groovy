@@ -63,7 +63,7 @@ class SendGridEmailBuilder {
         return this
     }
 
-    SendGridEmailBuilder addCustomHandlingInstruction(String headerName, String headerValue) {
+    SendGridEmailBuilder addCustomHandlingInstruction(String headerName, Object headerValue) {
         email.customHandlingInstructions.put(headerName, headerValue)
         return this
     }
