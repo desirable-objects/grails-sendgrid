@@ -1,90 +1,137 @@
 package uk.co.desirableobjects.sendgrid
 
-import grails.plugin.spock.UnitSpec
+import org.springframework.beans.BeanUtils
 import spock.lang.Shared
 
-import groovyx.net.http.RESTClient
 import uk.co.desirableobjects.sendgrid.exception.MissingCredentialsException
 import spock.lang.Unroll
 import net.sf.json.JSONSerializer
+import spock.lang.Specification
+import grails.test.mixin.TestFor
+import grails.test.mixin.support.GrailsUnitTestMixin
+import wslite.rest.RESTClient
+import wslite.rest.Response
+import wslite.http.HTTPRequest
+import wslite.http.HTTPResponse
 
-class SendGridApiConnectorServiceSpec extends UnitSpec {
-
-    @Shared SendGridApiConnectorService sendGridApiConnectorService
-    @Shared static private Map postData = [:]
+@Mixin(GrailsUnitTestMixin)
+@TestFor(SendGridApiConnectorService)
+class SendGridApiConnectorServiceSpec extends Specification {
 
     private static final String USERNAME = 'antony'
     private static final String PASSWORD = 'password'
 
-    def setupSpec() {
-        
-        mockConfig ''
-        
-        sendGridApiConnectorService = new SendGridApiConnectorService()
+    private static final Map<String, String> DEFAULT_CREDENTIALS = [username: USERNAME, password: PASSWORD]
 
-        RESTClient.metaClass.post = { Map params ->
-            postData = params.body
-            return [data:JSONSerializer.toJSON('{"response":"success"}')]
+    private static Response mockResponse
+    private static Map<String, Object> postData = [:]
+    private static String apiUrl
+
+    private class MockRestClientDelegate {
+
+        def multipart = { String name, byte[] body ->
+            postData.put(name, new String(body, 'UTF-8'))
         }
 
-        sendGridApiConnectorService.sendGrid = new RESTClient()
+    }
+
+    void setup() {
+
+        RESTClient.metaClass.constructor = { String url ->
+            apiUrl = url
+            BeanUtils.instantiateClass(RESTClient)
+        }
+
+        RESTClient.metaClass.post = { Map params, Closure closure ->
+            closure.delegate = new MockRestClientDelegate()
+            closure()
+            return mockResponse
+        }
 
     }
     
     def 'connector provides username and password to api'() {
 
         given:
-            mockConfig """
-                sendgrid {
-                    username = '${USERNAME}'
-                    password = '${PASSWORD}'
-                }
-            """
+            grailsApplication.config.sendgrid = DEFAULT_CREDENTIALS
+
+        and:
+            mockResponse = Mock(Response, constructorArgs: [Mock(HTTPRequest), Mock(HTTPResponse)])
 
         when:
-            sendGridApiConnectorService.post(new SendGridEmail())
-        
+            service.post(new SendGridEmail())
+
         then:
+            1 * mockResponse.contentAsString >> { return "{'status':'ok'}" }
+            0 * _
+
+        and:
             postData.api_user == USERNAME
             postData.api_key == PASSWORD
 
     }
 
     @Unroll
-    def 'No authentication configured [configuration was #config]'() {
+    def 'No authentication configured [configuration was #conf]'() {
 
         given:
-            mockConfig config
+            grailsApplication.config = conf
 
         when:
-            sendGridApiConnectorService.post(new SendGridEmail())
+            service.post(new SendGridEmail())
 
         then:
             thrown MissingCredentialsException
 
         where:
-            config << ['', 'sendgrid { }', 'sendgrid { username = "" }']
+            conf << [[:], [sendgrid:[:]], [sendgrid: [username:null]]]
 
     }
 
     @Unroll
-    def 'Configuration #config overrides API URL to be #expectedUri'() {
+    def 'Configuration #conf overrides API URL to be #expectedUri'() {
 
         given:
-            mockConfig config
+            service.grailsApplication.config = conf
+
+        and:
+            mockResponse = Mock(Response, constructorArgs: [Mock(HTTPRequest), Mock(HTTPResponse)])
 
         when:
-            sendGridApiConnectorService = new SendGridApiConnectorService()
+            service.post(new SendGridEmail())
 
         then:
-            sendGridApiConnectorService.sendGrid.uri.toString() == expectedUri
+            1 * mockResponse.contentAsString >> { return "{'status':'ok'}" }
+            0 * _
+
+        and:
+            apiUrl == expectedUri
 
         where:
-            config                                        | expectedUri
-            ''                                            | 'https://sendgrid.com/api/'
-            'sendgrid { } '                               | 'https://sendgrid.com/api/'
-            'sendgrid { api.url = "http://example.net" }' | 'http://example.net'
-            'sendgrid.api.url = "http://example.net" '    | 'http://example.net'
+            conf                                                                | expectedUri
+            [sendgrid: [:] + DEFAULT_CREDENTIALS]                               | 'https://sendgrid.com/api/'
+            [sendgrid: [api:[url:'http://example.net']] + DEFAULT_CREDENTIALS]  | 'http://example.net'
+
+    }
+
+    def 'connector can post attachments in the correct format'() {
+
+        given:
+            File file = new File('test/unit/true.png')
+            grailsApplication.config.sendgrid = DEFAULT_CREDENTIALS
+
+        and:
+            mockResponse = Mock(Response, constructorArgs: [Mock(HTTPRequest), Mock(HTTPResponse)])
+
+        when:
+            service.post(new SendGridEmail(attachments: [file]))
+
+        then:
+            1 * mockResponse.contentAsString >> { return "{'status':'ok'}" }
+            0 * _
+
+        and:
+            postData["files[true.png]"] == new String(file.bytes, 'UTF-8')
 
     }
 

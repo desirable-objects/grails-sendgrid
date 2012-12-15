@@ -2,6 +2,8 @@ package uk.co.desirableobjects.sendgrid
 
 class SendGridService {
 
+    static transactional = false
+
     SendGridApiConnectorService sendGridApiConnectorService
 
     def send(SendGridEmail email) {

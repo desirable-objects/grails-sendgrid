@@ -1,22 +1,31 @@
 package uk.co.desirableobjects.sendgrid
 
 import grails.plugin.spock.UnitSpec
+import grails.test.mixin.support.GrailsUnitTestMixin
 import net.sf.json.JSON
 import net.sf.json.groovy.GJson
 import net.sf.json.JSONObject
 import net.sf.json.JSONSerializer
+import spock.lang.Specification
+import wslite.http.HTTPRequest
+import wslite.http.HTTPResponse
+import wslite.rest.Response
 
-class SendGridResponseParsingSpec extends UnitSpec {
+@Mixin(GrailsUnitTestMixin)
+class SendGridResponseParsingSpec extends Specification {
 
     def 'Parse a success response'() {
 
         given:
-            JSON response = JSONSerializer.toJSON('{"message":"success"}')
+            Response response = Mock(Response, constructorArgs: [Mock(HTTPRequest), Mock(HTTPResponse)])
 
         when:
             SendGridResponse sgResponse = SendGridResponse.parse(response)
 
         then:
+            response.contentAsString >> { return '{"message":"success"}' }
+
+        and:
             sgResponse.successful
 
     }
@@ -24,10 +33,13 @@ class SendGridResponseParsingSpec extends UnitSpec {
     def 'Parse an error response'() {
 
         given:
-            JSON response = JSONSerializer.toJSON('{"message":"error","errors":["error message 1", "error message 2"]}')
+            Response response = Mock(Response, constructorArgs: [Mock(HTTPRequest), Mock(HTTPResponse)])
 
         when:
             SendGridResponse sgResponse = SendGridResponse.parse(response)
+
+        then:
+            response.contentAsString >> { return '{"message":"error","errors":["error message 1", "error message 2"]}' }
 
         then:
             !sgResponse.successful

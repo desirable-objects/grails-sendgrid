@@ -12,27 +12,25 @@ grails.project.dependency.resolution = {
     log "warn"
 
     repositories {
-        grailsPlugins()
         grailsHome()
+        grailsPlugins()
         grailsCentral()
 
-        mavenLocal(null)
+        mavenLocal
         mavenCentral()
-        mavenRepo 'http://repo.desirableobjects.co.uk'
     }
 
     dependencies {
-        runtime 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.1', {
-            excludes 'xml-apis', 'groovy'
-        }
-        test 'org.gmock:gmock:0.8.2'
+        runtime 'com.github.groovy-wslite:groovy-wslite:1.0.0-SNAPSHOT'
+        compile 'commons-codec:commons-codec:1.7'
+
     }
 
     plugins {
 
-        test ':spock:0.6'
+        test ':spock:0.7'
         
-        build ':release:2.0.2', {
+        build ':release:2.2.0', {
             export = false
         }
 

@@ -237,7 +237,6 @@ class SendGridEmailBuilderSpec extends UnitSpec {
 
     }
 
-    @Ignore
     def 'Builder can add attachments'() {
 
         given:
@@ -247,7 +246,7 @@ class SendGridEmailBuilderSpec extends UnitSpec {
         expect:
             SendGridEmail email = emailBuilder.build()
             email.attachments.size() == 1
-            email.toMap().'files[true.png]' == URLEncoder.encode(file.text)
+            email.toMap().'files[true.png]' == file.bytes
 
         when: 'a second file is added'
             File file2 = loadFile('false.png')

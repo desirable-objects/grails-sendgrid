@@ -1,7 +1,10 @@
 package uk.co.desirableobjects.sendgrid
 
 import grails.converters.JSON
+import groovy.transform.ToString
+import org.apache.commons.codec.net.URLCodec
 
+@ToString
 class SendGridEmail {
 
     List<String> to = []
@@ -59,11 +62,11 @@ class SendGridEmail {
     }
 
     private Map<String, Object> addAttachments() {
-        
+
         Map<String, Object> parameters = [:]
-        
+
         attachments.each { File attachment ->
-            parameters.put("files[${attachment.name}]" as String, new String(attachment.bytes))
+            parameters.put("files[${attachment.name}]" as String, attachment.bytes)
         }
 
         return parameters

@@ -1,10 +1,12 @@
 package uk.co.desirableobjects.sendgrid
 
-import grails.plugin.spock.UnitSpec
 import spock.lang.Shared
 import spock.lang.Ignore
+import spock.lang.Specification
+import grails.test.mixin.TestFor
 
-class SendGridServiceSpec extends UnitSpec {
+@TestFor(SendGridService)
+class SendGridServiceSpec extends Specification {
 
     private static final String RECIPIENT = 'recipient@example.org'
     private static final String RECIPIENT2 = 'recipient@example.com'
@@ -13,39 +15,35 @@ class SendGridServiceSpec extends UnitSpec {
     private static final String MESSAGE_TEXT = 'This is a test'
     private static final String SUBJECT = 'Hello there'
 
-    @Shared SendGridService sendGridService
-    @Shared SendGridApiConnectorService api
-
     def setupSpec() {
-        mockConfig '''
-            sendgrid {
-                username = 'test'
-                password = 'test'
-            }
-        '''
-        api = new MockSendGridConnector()
-        sendGridService = new SendGridService()
-        sendGridService.sendGridApiConnectorService = api
+
+        grailsApplication.config.sendgrid.username = 'test'
+        grailsApplication.config.sendgrid.password = 'test'
+
     }
 
     def 'Send an email'() {
 
+        given:
+            SendGridEmail sendGridEmail = new SendGridEmail(to: [RECIPIENT], subject:SUBJECT, body:MESSAGE_TEXT, from:SENDER)
+            service.sendGridApiConnectorService = Mock(SendGridApiConnectorService)
+
         when:
-            sendGridService.send(new SendGridEmail(to: RECIPIENT, subject:SUBJECT, body:MESSAGE_TEXT, from:SENDER))
+            service.send(sendGridEmail)
 
         then:
-            api.method == 'post'
-            api.to == [RECIPIENT]
-            api.subject == SUBJECT
-            api.text == MESSAGE_TEXT
-            api.from == SENDER
+            1 * service.sendGridApiConnectorService.post(sendGridEmail)
+            0 * _
 
     }
     
     def 'Send a text email using the mail plugin DSL'() {
-        
+
+        given:
+            service.sendGridApiConnectorService = Mock(SendGridApiConnectorService)
+
         when:
-            sendGridService.sendMail {
+            service.sendMail {
                 to this.RECIPIENT
                 from this.SENDER
                 subject this.SUBJECT
@@ -53,18 +51,23 @@ class SendGridServiceSpec extends UnitSpec {
             }
 
         then:
-            api.method == 'post'
-            api.to == [RECIPIENT]
-            api.subject == SUBJECT
-            api.text == MESSAGE_TEXT
-            api.from == SENDER
-        
+            1 * service.sendGridApiConnectorService.post({ SendGridEmail email ->
+                email.to == RECIPIENT
+                email.from == SENDER
+                email.subject == SUBJECT
+                email.body == MESSAGE_TEXT
+            } as SendGridEmail)
+            0 * _
+
     }
 
     def 'Send a html email using the mail plugin DSL'() {
 
+        given:
+            service.sendGridApiConnectorService = Mock(SendGridApiConnectorService)
+
         when:
-            sendGridService.sendMail {
+            service.sendMail {
                 to this.RECIPIENT
                 from this.SENDER
                 bcc this.BCC
@@ -73,19 +76,24 @@ class SendGridServiceSpec extends UnitSpec {
             }
 
         then:
-            api.method == 'post'
-            api.to == [RECIPIENT]
-            api.subject == SUBJECT
-            api.html == MESSAGE_TEXT
-            api.from == SENDER
-            api.bcc == [BCC]
+            1 * service.sendGridApiConnectorService.post({ SendGridEmail email ->
+                email.to == RECIPIENT
+                email.from == SENDER
+                email.subject == SUBJECT
+                email.html == MESSAGE_TEXT
+                email.bcc == [BCC]
+            } as SendGridEmail)
+            0 * _
 
     }
 
     def 'Send a text email with multiple recipients'() {
 
+        given:
+            service.sendGridApiConnectorService = Mock(SendGridApiConnectorService)
+
         when:
-            sendGridService.sendMail {
+            service.sendMail {
                 to this.RECIPIENT, this.RECIPIENT2
                 from this.SENDER
                 subject this.SUBJECT
@@ -93,20 +101,24 @@ class SendGridServiceSpec extends UnitSpec {
             }
 
         then:
-            api.method == 'post'
-            api.to == [RECIPIENT, RECIPIENT2]
-            api.subject == SUBJECT
-            api.text == MESSAGE_TEXT
-            api.from == SENDER
+            1 * service.sendGridApiConnectorService.post({ SendGridEmail email ->
+                email.to == [RECIPIENT, RECIPIENT2]
+                email.from == SENDER
+                email.subject == SUBJECT
+                email.body == MESSAGE_TEXT
+            } as SendGridEmail)
+            0 * _
 
     }
 
-    @Ignore
     def 'Send an email with attachments'() {
 
+        given:
+            service.sendGridApiConnectorService = Mock(SendGridApiConnectorService)
+
         when:
-            sendGridService.sendMail {
-                to this.RECIPIENT, this.RECIPIENT2
+            service.sendMail {
+                to this.RECIPIENT
                 from this.SENDER
                 subject this.SUBJECT
                 body this.MESSAGE_TEXT
@@ -114,12 +126,14 @@ class SendGridServiceSpec extends UnitSpec {
             }
 
         then:
-            api.method == 'post'
-            api.to == [RECIPIENT, RECIPIENT2]
-            api.subject == SUBJECT
-            api.text == MESSAGE_TEXT
-            api.from == SENDER
-            api."files[true.png]" == URLEncoder.encode(new File('./test/unit/true.png').text)
+            1 * service.sendGridApiConnectorService.post({ SendGridEmail email ->
+                email.to == [RECIPIENT, RECIPIENT2]
+                email.from == SENDER
+                email.subject == SUBJECT
+                email.body == MESSAGE_TEXT
+                email.attachments = [new File('./test/unit/true.png')]
+            } as SendGridEmail)
+            0 * _
 
 
 
