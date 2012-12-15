@@ -1,6 +1,8 @@
 package uk.co.desirableobjects.sendgrid
 
 import org.springframework.beans.BeanUtils
+import org.springframework.http.HttpStatus
+import org.springframework.web.client.RestClientException
 import spock.lang.Shared
 
 import uk.co.desirableobjects.sendgrid.exception.MissingCredentialsException
@@ -9,7 +11,9 @@ import net.sf.json.JSONSerializer
 import spock.lang.Specification
 import grails.test.mixin.TestFor
 import grails.test.mixin.support.GrailsUnitTestMixin
+import uk.co.desirableobjects.sendgrid.exception.SendGridCommunicationException
 import wslite.rest.RESTClient
+import wslite.rest.RESTClientException
 import wslite.rest.Response
 import wslite.http.HTTPRequest
 import wslite.http.HTTPResponse
@@ -132,6 +136,60 @@ class SendGridApiConnectorServiceSpec extends Specification {
 
         and:
             postData["files[true.png]"] == new String(file.bytes, 'UTF-8')
+
+    }
+
+    def 'send mail receives an exception'() {
+
+        setup:
+            HTTPResponse mockResponse = Mock(HTTPResponse)
+            RESTClient.metaClass.post = { Map params, Closure closure ->
+                throw new RESTClientException('problem', new HTTPRequest(), mockResponse)
+            }
+
+        and:
+            grailsApplication.config.sendgrid = DEFAULT_CREDENTIALS
+
+        when:
+            SendGridResponse sendGridResponse = service.post(new SendGridEmail())
+
+        then:
+            1 * mockResponse.contentAsString >> { return '''{
+    "message": "error",
+    "errors": [
+        "Permission denied, wrong credentials"
+    ]
+}''' }
+            0 * _
+
+        and:
+            !sendGridResponse.successful
+            sendGridResponse.hasErrors()
+            sendGridResponse.errors.first() == 'Permission denied, wrong credentials'
+
+        cleanup:
+            RESTClient.metaClass = null
+
+    }
+
+    def 'send mail receives an exception when there is no response'() {
+
+        setup:
+            RESTClient.metaClass.post = { Map params, Closure closure ->
+                throw new RESTClientException('problem', new HTTPRequest(), null)
+            }
+
+        and:
+            grailsApplication.config.sendgrid = DEFAULT_CREDENTIALS
+
+        when:
+            service.post(new SendGridEmail())
+
+        then:
+            thrown SendGridCommunicationException
+
+        cleanup:
+            RESTClient.metaClass = null
 
     }
 

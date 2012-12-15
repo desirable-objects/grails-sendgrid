@@ -10,7 +10,7 @@ class SendGridResponse {
     boolean successful
     List<String> errors
 
-    static SendGridResponse parse(Response response) {
+    static SendGridResponse parse(def response) {
 
         JSONElement json = JSON.parse(response.contentAsString)
 

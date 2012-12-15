@@ -1,10 +1,10 @@
 package uk.co.desirableobjects.sendgrid
 
+import uk.co.desirableobjects.sendgrid.exception.SendGridCommunicationException
 import wslite.rest.*
 import uk.co.desirableobjects.sendgrid.exception.MissingCredentialsException
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
-// TODO: Non 200 should return a response object!
 class SendGridApiConnectorService {
 
     static transactional = false
@@ -26,19 +26,25 @@ class SendGridApiConnectorService {
 
     def post(SendGridEmail email) {
 
-        def proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress('localhost', 8888))
-
         RESTClient sendGrid = new RESTClient(grailsApplication.config.sendgrid?.api?.url ?: 'https://sendgrid.com/api/')
-        Response response = sendGrid.post(proxy: proxy, path: 'mail.send.json') {
-            prepareParameters(email).each { BodyPart part ->
-                multipart part.name, part.content
+        Response response
+        try {
+            response = sendGrid.post(path: 'mail.send.json') {
+                prepareParameters(email).each { BodyPart part ->
+                    multipart part.name, part.content
+                }
             }
+        } catch (RESTClientException rce) {
+            if (rce.response) {
+                return handle(rce.response)
+            }
+            throw new SendGridCommunicationException('Unknown error communicating with SendGrid', rce)
         }
         return handle(response)
 
     }
     
-    private SendGridResponse handle(Response clientResponse) {
+    private SendGridResponse handle(def clientResponse) {
 
         return SendGridResponse.parse(clientResponse)
 
