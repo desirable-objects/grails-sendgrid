@@ -1,0 +1,1 @@
+See the [Grails Plugin portal page](http://grails.org/plugin/sendgrid) for installation instructions, documentation and more.
