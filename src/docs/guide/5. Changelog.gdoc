@@ -1,5 +1,16 @@
 Changelog
 
+2012-12-16 - 1.0
+
+* Attachment support
+* Moved to spock for testing
+* Moved to groovy-wslite from rest-builder
+* Improved metadata
+
+2012-06-06 - 0.4
+
+* Minor refactoring
+
 2011-12-31 - 0.2
 
 * Changed the syntax of the builder to more closely match the grails-mail plugin

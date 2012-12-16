@@ -4,8 +4,6 @@ In a pinch, you can send email using the SendGridService in one of three ways:
 
  > Note: This is the grails-mail way of doing things, and should always be your preferred method to allow for quick and easy interchange of any grails-supported mail plugin.
 
- > Note: Not yet implemented!
-
 {code}
 sendMail {
      from 'antony@example.com'
@@ -68,6 +66,4 @@ Attachments | {code}.addAttachment(new File('/tmp/your.file')){code} | {code}att
 {table}
 
 For further details, see the sendgrid api [http://docs.sendgrid.com/documentation/api/web-api/mail/]
-
-> Note: attachments are not yet working.
 

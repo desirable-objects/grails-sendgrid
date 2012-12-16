@@ -1,3 +1,3 @@
-1. Attachments do not yet work.
+1. Attachments can have a maximum size of 7mb each.
 
-This problem is expected to be resolved in version 0.3
+This is a limitation of sendgrid, rather than the plugin itself.
