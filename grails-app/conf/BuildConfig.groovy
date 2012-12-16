@@ -18,10 +18,11 @@ grails.project.dependency.resolution = {
 
         mavenLocal
         mavenCentral()
+        mavenRepo 'http://repo.desirableobjects.co.uk'
     }
 
     dependencies {
-        runtime 'com.github.groovy-wslite:groovy-wslite:1.0.0-SNAPSHOT'
+        runtime 'com.github.groovy-wslite:groovy-wslite:0.7.1.1'
         compile 'commons-codec:commons-codec:1.7'
 
     }
