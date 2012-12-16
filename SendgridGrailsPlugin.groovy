@@ -18,7 +18,7 @@ class SendgridGrailsPlugin {
     ]
     def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPSENDGRID" ]
     def scm = [ url: 'https://github.com/aiten/grails-sendgrid' ]
-    def documentation = "http://grails.org/plugin/grails-sendgrid"
+    def documentation = 'http://aiten.github.com/grails-sendgrid/'
 
     def doWithSpring = {
 
