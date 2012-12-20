@@ -1,13 +1,9 @@
 package uk.co.desirableobjects.sendgrid
 
 import org.springframework.beans.BeanUtils
-import org.springframework.http.HttpStatus
-import org.springframework.web.client.RestClientException
-import spock.lang.Shared
 
 import uk.co.desirableobjects.sendgrid.exception.MissingCredentialsException
 import spock.lang.Unroll
-import net.sf.json.JSONSerializer
 import spock.lang.Specification
 import grails.test.mixin.TestFor
 import grails.test.mixin.support.GrailsUnitTestMixin
@@ -128,7 +124,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
             mockResponse = Mock(Response, constructorArgs: [Mock(HTTPRequest), Mock(HTTPResponse)])
 
         when:
-            service.post(new SendGridEmail(attachments: [file]))
+            service.post(new SendGridEmail(attachments: ['true.png': file]))
 
         then:
             1 * mockResponse.contentAsString >> { return "{'status':'ok'}" }

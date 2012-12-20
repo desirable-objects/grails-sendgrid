@@ -29,8 +29,13 @@ class SendGridSendMailDSLDelegate {
         return builder.addBcc(bccEmail)
     }
 
+    @Deprecated
     SendGridEmailBuilder attach(File attachment) {
-        return builder.addAttachment(attachment)
+        return builder.addAttachment(attachment.name, attachment)
+    }
+
+    SendGridEmailBuilder attach(String filename, File attachment) {
+        return builder.addAttachment(filename, attachment)
     }
 
 }

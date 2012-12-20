@@ -1,11 +1,6 @@
 package uk.co.desirableobjects.sendgrid
 
-import grails.plugin.spock.UnitSpec
 import grails.test.mixin.support.GrailsUnitTestMixin
-import net.sf.json.JSON
-import net.sf.json.groovy.GJson
-import net.sf.json.JSONObject
-import net.sf.json.JSONSerializer
 import spock.lang.Specification
 import wslite.http.HTTPRequest
 import wslite.http.HTTPResponse

@@ -21,8 +21,8 @@ class EmailAttachmentsIntegrationSpec extends IntegrationSpec {
                     from 'aj@incestry.co.uk'
                     subject 'hi'
                     body 'hello'
-                    attach new File('test/unit/true.png')
-                }
+                    attach 'true.png', new File('test/unit/true.png')
+                } as SendGridResponse
 
         expect:
             resp.successful

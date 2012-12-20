@@ -241,7 +241,7 @@ class SendGridEmailBuilderSpec extends UnitSpec {
 
         given:
             File file = loadFile('true.png')
-            SendGridEmailBuilder emailBuilder = createBuilder().withText(DEFAULT_TEXT_CONTENT).addAttachment(file)
+            SendGridEmailBuilder emailBuilder = createBuilder().withText(DEFAULT_TEXT_CONTENT).addAttachment('true.png', file)
 
         expect:
             SendGridEmail email = emailBuilder.build()
@@ -250,13 +250,23 @@ class SendGridEmailBuilderSpec extends UnitSpec {
 
         when: 'a second file is added'
             File file2 = loadFile('false.png')
-            emailBuilder.addAttachment(file2)
+            emailBuilder.addAttachment('false.png', file2)
             email = emailBuilder.build()
 
         then:
             email.attachments.size() == 2
-            email.toMap().keySet().containsAll('files[true.png]', 'files[true.png]')
+            email.toMap().keySet().containsAll('files[true.png]', 'files[false.png]')
 
+    }
+
+    def 'Builder does not accept attachments with brackets in name'() {
+
+        when:
+            SendGridEmailBuilder emailBuilder = createBuilder().addAttachment('hi]', new File('.'))
+
+        then:
+            IllegalArgumentException iae = thrown IllegalArgumentException
+            iae.message == 'You cannot use square brackets in attachment filenames'
     }
 
     private File loadFile(String fileName) {

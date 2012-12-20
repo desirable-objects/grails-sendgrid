@@ -1,8 +1,6 @@
 package uk.co.desirableobjects.sendgrid
 
 import org.codehaus.groovy.grails.web.json.JSONElement
-import net.sf.json.JSONObject
-import wslite.rest.Response
 import grails.converters.JSON
 
 class SendGridResponse {
@@ -12,7 +10,7 @@ class SendGridResponse {
 
     static SendGridResponse parse(def response) {
 
-        JSONElement json = JSON.parse(response.contentAsString)
+        JSONElement json = (JSONElement)JSON.parse(response.contentAsString as String)
 
         boolean success = determineResult(json)
         List<String> errorMessages = parseErrorMessages(json)

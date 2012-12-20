@@ -62,7 +62,7 @@ Body text | {code}.text('Your message text'){code} | {code}body 'Your message te
 Body html | {code}.html('<h2>Your message html</h2>'){code} | {code}html '<h2>Your message html</h2>'{code} | String | No | Yes (one of text or html)
 Custom [handling instruction|http://docs.sendgrid.com/documentation/api/smtp-api/] | {code}.addCustomHandlingInstruction('headerName', 'headerValue'){code} | {code}addCustomHandlingInstruction 'headerName', 'headerValue'{code} | String, String | Yes | No
 Header | {code}.addHeader('headerName', 'headerValue'){code} | {code}addHeader 'headerName', 'headerValue'{code} | String, String | Yes | No
-Attachments | {code}.addAttachment(new File('/tmp/your.file')){code} | {code}attach new File('/tmp/your.file'){code} | File | Yes | No
+Attachments | {code}.addAttachment(String filename, new File('/tmp/your.file')){code} | {code}attach 'myfile.txt', new File('/tmp/your.file'){code} | String, File | Yes | No
 {table}
 
 For further details, see the sendgrid api [http://docs.sendgrid.com/documentation/api/web-api/mail/]

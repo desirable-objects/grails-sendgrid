@@ -131,7 +131,7 @@ class SendGridServiceSpec extends Specification {
                 email.from == SENDER
                 email.subject == SUBJECT
                 email.body == MESSAGE_TEXT
-                email.attachments = [new File('./test/unit/true.png')]
+                email.attachments = ['true.png': new File('./test/unit/true.png')]
             } as SendGridEmail)
             0 * _
 

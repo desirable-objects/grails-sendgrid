@@ -19,7 +19,7 @@ class SendGridEmail {
     List<String> bcc = []
     Map headers = [:]
     Map customHandlingInstructions = [:]
-    List<File> attachments = []
+    Map<String, File> attachments = [:]
 
     private allParameters = [
             to:'to',
@@ -65,8 +65,8 @@ class SendGridEmail {
 
         Map<String, Object> parameters = [:]
 
-        attachments.each { File attachment ->
-            parameters.put("files[${attachment.name}]" as String, attachment.bytes)
+        attachments.each { String filename, File attachment ->
+            parameters.put("files[${filename}]" as String, attachment.bytes)
         }
 
         return parameters
