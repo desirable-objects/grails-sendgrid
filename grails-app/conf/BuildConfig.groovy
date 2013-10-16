@@ -22,7 +22,7 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
-        runtime 'com.github.groovy-wslite:groovy-wslite:0.7.1.1'
+        runtime 'com.github.groovy-wslite:groovy-wslite:0.8.0'
         compile 'commons-codec:commons-codec:1.7'
 
     }
