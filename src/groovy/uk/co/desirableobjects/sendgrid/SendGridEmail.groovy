@@ -65,7 +65,7 @@ class SendGridEmail {
 
         Map<String, Object> parameters = [:]
 
-        attachments.each { String filename, File attachment ->
+        attachments.each { String filename, attachment ->
             parameters.put("files[${filename}]" as String, attachment.bytes)
         }
 
