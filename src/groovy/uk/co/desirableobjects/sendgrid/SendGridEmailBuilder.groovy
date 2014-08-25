@@ -68,7 +68,7 @@ class SendGridEmailBuilder {
         return this
     }
 
-    SendGridEmailBuilder addAttachment(String filename, File file) {
+    SendGridEmailBuilder addAttachment(String filename, file) {
 
         if (filename.contains('[') || filename.contains(']')) {
             throw new IllegalArgumentException('You cannot use square brackets in attachment filenames')
