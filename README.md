@@ -1,1 +1,2 @@
 See the [Grails Plugin portal page](http://grails.org/plugin/sendgrid) for installation instructions, documentation and more.
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/antony/grails-sendgrid?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
