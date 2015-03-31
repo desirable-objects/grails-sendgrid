@@ -16,12 +16,16 @@ class SendGridEmail {
     String html
     String replyTo
     Date sentDate
+    String username
+    String password
     List<String> bcc = []
     Map headers = [:]
     Map customHandlingInstructions = [:]
     Map<String, File> attachments = [:]
 
     private allParameters = [
+            username: 'api_user',
+            password: 'api_key',
             to:'to',
             from:'from',
             subject:'subject',

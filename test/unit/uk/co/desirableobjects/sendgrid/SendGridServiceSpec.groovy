@@ -135,7 +135,32 @@ class SendGridServiceSpec extends Specification {
             } as SendGridEmail)
             0 * _
 
+    }
 
+    def 'Send an email with specific api credentials'() {
+
+        given:
+            service.sendGridApiConnectorService = Mock(SendGridApiConnectorService)
+
+        when:
+            service.sendMail {
+                to this.RECIPIENT
+                from this.SENDER
+                subject this.SUBJECT
+                body this.MESSAGE_TEXT
+                apiCredentials 'testuser', 'testpassword'
+            }
+
+        then:
+            1 * service.sendGridApiConnectorService.post({ SendGridEmail email ->
+                email.to == [RECIPIENT, RECIPIENT2]
+                email.from == SENDER
+                email.subject == SUBJECT
+                email.body == MESSAGE_TEXT
+                email.username == 'testuser'
+                email.password == 'testpassword'
+            } as SendGridEmail)
+            0 * _
 
     }
 

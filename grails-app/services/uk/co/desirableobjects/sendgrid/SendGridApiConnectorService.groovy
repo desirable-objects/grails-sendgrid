@@ -52,11 +52,14 @@ class SendGridApiConnectorService {
     
     private List<BodyPart> prepareParameters(SendGridEmail email) {
 
-        checkConfig()
+        checkConfig(email)
 
         List<BodyPart> body = []
-        body << new BodyPart(name: 'api_user', content: grailsApplication.config.sendgrid?.username.bytes)
-        body << new BodyPart(name: 'api_key', content: grailsApplication.config.sendgrid?.password.bytes)
+        if(!email.username)
+            body << new BodyPart(name: 'api_user', content: grailsApplication.config.sendgrid?.username.bytes)
+
+        if(!email.password)
+            body << new BodyPart(name: 'api_key', content: grailsApplication.config.sendgrid?.password.bytes)
 
         email.toMap().each { String key, value ->
             if (value instanceof List<?>) {
@@ -70,8 +73,9 @@ class SendGridApiConnectorService {
 
     }
 
-    private void checkConfig() {
-        if (!grailsApplication.config.sendgrid.password || !grailsApplication.config.sendgrid.username) {
+    private void checkConfig(email) {
+        if ((!grailsApplication.config.sendgrid.password || !grailsApplication.config.sendgrid.username) &&
+            (!email.username || !email.password)) {
             throw new MissingCredentialsException()
         }
     }

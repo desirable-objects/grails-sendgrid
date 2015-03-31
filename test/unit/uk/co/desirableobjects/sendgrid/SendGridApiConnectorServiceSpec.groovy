@@ -50,7 +50,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
 
     }
     
-    def 'connector provides username and password to api'() {
+    def 'connector provides username and password to api from configuration'() {
 
         given:
             grailsApplication.config.sendgrid = DEFAULT_CREDENTIALS
@@ -68,6 +68,27 @@ class SendGridApiConnectorServiceSpec extends Specification {
         and:
             postData.api_user == USERNAME
             postData.api_key == PASSWORD
+
+    }
+
+    def 'connector provides username and password to api from email'() {
+
+        given:
+            grailsApplication.config = [:]
+
+        and:
+            mockResponse = Mock(Response, constructorArgs: [Mock(HTTPRequest), Mock(HTTPResponse)])
+
+        when:
+            service.post(new SendGridEmail(username: 'testuser', password: 'testpassword'))
+
+        then:
+            1 * mockResponse.contentAsString >> { return "{'status':'ok'}" }
+            0 * _
+
+        and:
+            postData.api_user == 'testuser'
+            postData.api_key == 'testpassword'
 
     }
 

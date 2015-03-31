@@ -10,11 +10,18 @@ class SendGridEmailBuilder {
         this.email = new SendGridEmail()
     }
 
+    SendGridEmailBuilder apiCredentials(String username, String password) {
+        email.username = username
+        email.password = password
+        return this
+    }
+
     SendGridEmailBuilder from(String senderName = null, String sender) {
         email.fromName = senderName
         email.from = sender
         return this
     }
+
 
     SendGridEmailBuilder to(String toName = null, String to) {
         if (toName) {
