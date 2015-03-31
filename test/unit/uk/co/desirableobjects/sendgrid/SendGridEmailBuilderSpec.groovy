@@ -269,6 +269,21 @@ class SendGridEmailBuilderSpec extends UnitSpec {
             iae.message == 'You cannot use square brackets in attachment filenames'
     }
 
+    def 'Builder can add sendgrid api credentials'() {
+
+        given:
+            SendGridEmailBuilder emailBuilder = createBuilder()
+                                            .withText(DEFAULT_TEXT_CONTENT)
+                                            .apiCredentials('testuser', 'testpassword')
+
+        when:
+            SendGridEmail email = emailBuilder.build()
+
+        then:
+            email.username == 'testuser'
+            email.password == 'testpassword'            
+    }
+
     private File loadFile(String fileName) {
 
         URI uri = getClass().getClassLoader().getResource(fileName).toURI()
