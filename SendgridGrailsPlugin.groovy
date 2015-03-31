@@ -1,6 +1,6 @@
 class SendgridGrailsPlugin {
 
-    def version = "1.2"
+    def version = "1.3"
     def grailsVersion = "1.3.1 > *"
     def pluginExcludes = [
             "grails-app/views/error.gsp"
