@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="uk.co.desirableobjects.sendgrid.SendGridResponseParsingSpec" tests="2" skipped="0" failures="0" errors="0" timestamp="2016-08-16T23:54:53" hostname="Roberto-MacBook-Pro.local" time="0.002">
-  <properties/>
-  <testcase name="Parse a success response" classname="uk.co.desirableobjects.sendgrid.SendGridResponseParsingSpec" time="0.001"/>
-  <testcase name="Parse an error response" classname="uk.co.desirableobjects.sendgrid.SendGridResponseParsingSpec" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
