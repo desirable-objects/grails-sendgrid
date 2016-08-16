@@ -3,12 +3,11 @@ package uk.co.desirableobjects.sendgrid
 import uk.co.desirableobjects.sendgrid.exception.SendGridCommunicationException
 import wslite.rest.*
 import uk.co.desirableobjects.sendgrid.exception.MissingCredentialsException
-import org.codehaus.groovy.grails.commons.GrailsApplication
 
 class SendGridApiConnectorService {
 
     static transactional = false
-    GrailsApplication grailsApplication
+    def grailsApplication
 
     class BodyPart {
         String name

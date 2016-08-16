@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="uk.co.desirableobjects.sendgrid.SendGridApiConnectorServiceSpec" tests="10" skipped="0" failures="0" errors="0" timestamp="2016-08-16T23:54:51" hostname="Roberto-MacBook-Pro.local" time="1.487">
+  <properties/>
+  <testcase name="connector provides username and password to api from configuration" classname="uk.co.desirableobjects.sendgrid.SendGridApiConnectorServiceSpec" time="1.423"/>
+  <testcase name="connector provides username and password to api from email" classname="uk.co.desirableobjects.sendgrid.SendGridApiConnectorServiceSpec" time="0.01"/>
+  <testcase name="No authentication configured [configuration was [:]]" classname="uk.co.desirableobjects.sendgrid.SendGridApiConnectorServiceSpec" time="0.007"/>
+  <testcase name="No authentication configured [configuration was [sendgrid:[:]]]" classname="uk.co.desirableobjects.sendgrid.SendGridApiConnectorServiceSpec" time="0.004"/>
+  <testcase name="No authentication configured [configuration was [sendgrid:[username:null]]]" classname="uk.co.desirableobjects.sendgrid.SendGridApiConnectorServiceSpec" time="0.003"/>
+  <testcase name="Configuration [sendgrid:[username:antony, password:password]] overrides API URL to be https://sendgrid.com/api/" classname="uk.co.desirableobjects.sendgrid.SendGridApiConnectorServiceSpec" time="0.004"/>
+  <testcase name="Configuration [sendgrid:[api:[url:http://example.net], username:antony, password:password]] overrides API URL to be http://example.net" classname="uk.co.desirableobjects.sendgrid.SendGridApiConnectorServiceSpec" time="0.003"/>
+  <testcase name="connector can post attachments in the correct format" classname="uk.co.desirableobjects.sendgrid.SendGridApiConnectorServiceSpec" time="0.008"/>
+  <testcase name="send mail receives an exception" classname="uk.co.desirableobjects.sendgrid.SendGridApiConnectorServiceSpec" time="0.013"/>
+  <testcase name="send mail receives an exception when there is no response" classname="uk.co.desirableobjects.sendgrid.SendGridApiConnectorServiceSpec" time="0.007"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
