@@ -16,10 +16,10 @@ class GrailsSendgridGrailsPlugin extends Plugin {
 
     def profiles = ['web']
 
-    def documentation = "https://github.com/antony/grails-sendgrid"
+    def documentation = "https://github.com/desirable-objects/grails-sendgrid"
     def license = "APACHE"
-    def issueManagement = [ system: "Github", url: "https://github.com/antony/grails-sendgrid/issues" ]
-    def scm = [ url: 'https://github.com/antony/grails-sendgrid' ]
+    def issueManagement = [ system: "Github", url: "https://github.com/desirable-objects/grails-sendgrid/issues" ]
+    def scm = [ url: 'https://github.com/desirable-objects/grails-sendgrid' ]
     def developers = [
             [name: 'Antony Jones', email: 'aj+sendgrid@desirableobjects.co.uk'],
             [name: 'Roberto Perez', email: 'roberto@perezalcolea.info'],
