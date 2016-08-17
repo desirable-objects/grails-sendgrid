@@ -22,7 +22,7 @@ dependencies {
 Configuration
 ----------
 
-Configuration takes place in your application's @Config.groovy@ file.
+Configuration takes place in your application's yaml file.
 
 The basic configuration you will need to use the plugin is:
 
