@@ -54,12 +54,14 @@ grailsPublish {
     user = System.getenv("BINTRAY_USER") ?: project.hasProperty("bintrayUser") ? project.bintrayUser : ''
     key = System.getenv("BINTRAY_KEY") ?: project.hasProperty("bintrayKey") ? project.bintrayKey : ''
     githubSlug = 'https://github.com/antony/grails-sendgrid'
+    userOrg = 'desirable-objects'
+    repo = 'grails-plugins'
     license {
         name = 'Apache-2.0'
     }
     title = "Grails SendGrid Plugin"
     desc = "Allows the sending of Email via SendGrid's services"
     developers = [antony:"Antony Jones", rpalcolea:"Roberto Perez Alcolea"]
-    portalUser = ""
-    portalPassword = ""    
+    portalUser = System.getenv("PORTAL_USER")
+    portalPassword = System.getenv("PORTAL_PASSWORD")
 }
