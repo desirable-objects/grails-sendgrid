@@ -1,6 +1,7 @@
 # grails-sendgrid
 
 [![Slack Signup](http://slack-signup.grails.org/badge.svg)](http://slack-signup.grails.org)
+[![Travis CI](https://travis-ci.org/desirable-objects/grails-sendgrid.svg)](https://travis-ci.org/desirable-objects/grails-sendgrid)
 
 Introduction
 ----------
