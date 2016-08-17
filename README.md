@@ -6,7 +6,7 @@
 Introduction
 ----------
 
-The Grails SendGrid plugin allows you to use the services offered by [SendGrid|http://sendgrid.com] to send email from your application.
+The Grails SendGrid plugin allows you to use the services offered by [SendGrid](http://sendgrid.com) to send email from your application.
 
 Installation
 ----------
