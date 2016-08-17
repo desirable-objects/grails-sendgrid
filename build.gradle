@@ -53,7 +53,7 @@ dependencies {
 grailsPublish {
     user = System.getenv("BINTRAY_USER") ?: project.hasProperty("bintrayUser") ? project.bintrayUser : ''
     key = System.getenv("BINTRAY_KEY") ?: project.hasProperty("bintrayKey") ? project.bintrayKey : ''
-    githubSlug = 'https://github.com/antony/grails-sendgrid'
+    githubSlug = 'https://github.com/desirable-objects/grails-sendgrid'
     userOrg = 'desirable-objects'
     repo = 'grails-plugins'
     license {
