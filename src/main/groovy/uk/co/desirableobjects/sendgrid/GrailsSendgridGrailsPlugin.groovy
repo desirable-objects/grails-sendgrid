@@ -1,10 +1,9 @@
 package uk.co.desirableobjects.sendgrid
 
-import grails.plugins.*
+import grails.plugins.Plugin
 
 class GrailsSendgridGrailsPlugin extends Plugin {
 
-    // the version or versions of Grails the plugin is designed for
     def grailsVersion = "3.0.0 > *"
 
     def loadAfter = ["mail"]

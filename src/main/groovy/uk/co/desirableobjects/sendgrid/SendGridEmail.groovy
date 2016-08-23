@@ -22,7 +22,7 @@ class SendGridEmail {
     Map customHandlingInstructions = [:]
     Map<String, File> attachments = [:]
 
-    private allParameters = [
+    private static final Map<String, String> allParameters = [
             username: 'api_user',
             password: 'api_key',
             to:'to',
@@ -40,27 +40,20 @@ class SendGridEmail {
     ]
 
     Map<String, Object> toMap() {
-
-        Map<String, Object> parameters = [:]
-
-        parameters.putAll(encodeParameters())
-        parameters.putAll(addAttachments())
-
-        return parameters
-
+        encodeParameters() + addAttachments()
     }
-    
+
     private Map<String, Object> encodeParameters() {
-        
+
         Map<String, Object> parameters = [:]
-        
+
         allParameters.each { String internalName, String externalName ->
-            Object value = this[internalName]
+            def value = this[internalName]
             if (value) {
-                parameters.put(externalName, map(value))
+                parameters[externalName] = map(value)
             }
         }
-        
+
         return parameters
     }
 
@@ -69,7 +62,7 @@ class SendGridEmail {
         Map<String, Object> parameters = [:]
 
         attachments.each { String filename, File attachment ->
-            parameters.put("files[${filename}]" as String, attachment.bytes)
+            parameters["files[$filename]".toString()] = attachment.bytes
         }
 
         return parameters
@@ -87,12 +80,12 @@ class SendGridEmail {
         return date.format("yyyy-MM-dd'T'HH:mm:ssz")
     }
 
-    private String map(HashMap map) {
+    private String map(Map map) {
         return (map as JSON).toString()
     }
-    
-    public void setTo(String recipient) {
-        this.to << recipient
+
+    void setTo(String recipient) {
+        to << recipient
     }
 
 }

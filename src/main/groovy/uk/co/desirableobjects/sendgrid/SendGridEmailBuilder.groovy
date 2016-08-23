@@ -4,11 +4,9 @@ import uk.co.desirableobjects.sendgrid.exception.InvalidEmailException
 
 class SendGridEmailBuilder {
 
-    private SendGridEmail email
+    private static final List<String> REQUIRED_PARAMETERS = ['to', 'subject', 'from']
 
-    SendGridEmailBuilder() {
-        this.email = new SendGridEmail()
-    }
+    private SendGridEmail email = new SendGridEmail()
 
     SendGridEmailBuilder apiCredentials(String username, String password) {
         email.username = username
@@ -31,15 +29,15 @@ class SendGridEmailBuilder {
         return this
     }
 
-    SendGridEmailBuilder addRecipient(String toName = null, String to) {
-        return this.to(toName, to)
+    SendGridEmailBuilder addRecipient(String toName = null, String recipient) {
+        return to(toName, recipient)
     }
 
     SendGridEmailBuilder subject(String subjectLine) {
         email.subject = subjectLine
         return this
     }
-    
+
     SendGridEmailBuilder withText(String textContent) {
         email.body = textContent
         return this
@@ -87,18 +85,18 @@ class SendGridEmailBuilder {
 
     SendGridEmail build() {
         validateRequiredParameters()
-        return this.email
+        return email
     }
 
     private validateRequiredParameters() {
 
-        ['to', 'subject', 'from'].each { String field ->
-            if (!this.email[field]) {
+        for (String field in REQUIRED_PARAMETERS) {
+            if (!email[field]) {
                 throw new InvalidEmailException([field])
             }
         }
 
-        if (!(this.email.body || this.email.html)) {
+        if (!(email.body || email.html)) {
             throw new InvalidEmailException(['body', 'html'])
         }
     }

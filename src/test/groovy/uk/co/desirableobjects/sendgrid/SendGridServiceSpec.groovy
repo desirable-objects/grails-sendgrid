@@ -13,14 +13,14 @@ class SendGridServiceSpec extends Specification {
     private static final String MESSAGE_TEXT = 'This is a test'
     private static final String SUBJECT = 'Hello there'
 
-    def setupSpec() {
+    void setupSpec() {
 
         grailsApplication.config.sendgrid.username = 'test'
         grailsApplication.config.sendgrid.password = 'test'
 
     }
 
-    def 'Send an email'() {
+    void 'Send an email'() {
 
         given:
             SendGridEmail sendGridEmail = new SendGridEmail(to: [RECIPIENT], subject:SUBJECT, body:MESSAGE_TEXT, from:SENDER)
@@ -34,18 +34,18 @@ class SendGridServiceSpec extends Specification {
             0 * _
 
     }
-    
-    def 'Send a text email using the mail plugin DSL'() {
+
+    void 'Send a text email using the mail plugin DSL'() {
 
         given:
             service.sendGridApiConnectorService = Mock(SendGridApiConnectorService)
 
         when:
             service.sendMail {
-                to this.RECIPIENT
-                from this.SENDER
-                subject this.SUBJECT
-                body this.MESSAGE_TEXT
+                to RECIPIENT
+                from SENDER
+                subject SUBJECT
+                body MESSAGE_TEXT
             }
 
         then:
@@ -59,18 +59,18 @@ class SendGridServiceSpec extends Specification {
 
     }
 
-    def 'Send a html email using the mail plugin DSL'() {
+    void 'Send a html email using the mail plugin DSL'() {
 
         given:
             service.sendGridApiConnectorService = Mock(SendGridApiConnectorService)
 
         when:
             service.sendMail {
-                to this.RECIPIENT
-                from this.SENDER
-                bcc this.BCC
-                subject this.SUBJECT
-                html this.MESSAGE_TEXT
+                to RECIPIENT
+                from SENDER
+                bcc BCC
+                subject SUBJECT
+                html MESSAGE_TEXT
             }
 
         then:
@@ -85,17 +85,17 @@ class SendGridServiceSpec extends Specification {
 
     }
 
-    def 'Send a text email with multiple recipients'() {
+    void 'Send a text email with multiple recipients'() {
 
         given:
             service.sendGridApiConnectorService = Mock(SendGridApiConnectorService)
 
         when:
             service.sendMail {
-                to this.RECIPIENT, this.RECIPIENT2
-                from this.SENDER
-                subject this.SUBJECT
-                body this.MESSAGE_TEXT
+                to RECIPIENT, RECIPIENT2
+                from SENDER
+                subject SUBJECT
+                body MESSAGE_TEXT
             }
 
         then:
@@ -109,17 +109,17 @@ class SendGridServiceSpec extends Specification {
 
     }
 
-    def 'Send an email with attachments'() {
+    void 'Send an email with attachments'() {
 
         given:
             service.sendGridApiConnectorService = Mock(SendGridApiConnectorService)
 
         when:
             service.sendMail {
-                to this.RECIPIENT
-                from this.SENDER
-                subject this.SUBJECT
-                body this.MESSAGE_TEXT
+                to RECIPIENT
+                from SENDER
+                subject SUBJECT
+                body MESSAGE_TEXT
                 attach new File('./test/unit/true.png')
             }
 
@@ -135,17 +135,17 @@ class SendGridServiceSpec extends Specification {
 
     }
 
-    def 'Send an email with specific api credentials'() {
+    void 'Send an email with specific api credentials'() {
 
         given:
             service.sendGridApiConnectorService = Mock(SendGridApiConnectorService)
 
         when:
             service.sendMail {
-                to this.RECIPIENT
-                from this.SENDER
-                subject this.SUBJECT
-                body this.MESSAGE_TEXT
+                to RECIPIENT
+                from SENDER
+                subject SUBJECT
+                body MESSAGE_TEXT
                 apiCredentials 'testuser', 'testpassword'
             }
 

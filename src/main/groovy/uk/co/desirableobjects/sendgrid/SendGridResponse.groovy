@@ -8,7 +8,7 @@ class SendGridResponse {
     boolean successful
     List<String> errors
 
-    static SendGridResponse parse(def response) {
+    static SendGridResponse parse(response) {
 
         JSONElement json = (JSONElement) JSON.parse(response.contentAsString as String)
 
@@ -18,9 +18,9 @@ class SendGridResponse {
         return new SendGridResponse(successful: success, errors: errorMessages)
 
     }
-    
+
     boolean hasErrors() {
-        return !errors.isEmpty()
+        errors
     }
 
     private static boolean determineResult(JSONElement response) {

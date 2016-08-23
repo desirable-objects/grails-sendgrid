@@ -27,7 +27,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
     private class MockRestClientDelegate {
 
         def multipart = { String name, byte[] body ->
-            postData.put(name, new String(body, 'UTF-8'))
+            postData[name] = new String(body, 'UTF-8')
         }
 
     }
@@ -47,7 +47,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
 
     }
 
-    def 'connector provides username and password to api from configuration'() {
+    void 'connector provides username and password to api from configuration'() {
 
         given:
         grailsApplication.config.sendgrid = DEFAULT_CREDENTIALS
@@ -68,7 +68,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
 
     }
 
-    def 'connector provides username and password to api from email'() {
+    void 'connector provides username and password to api from email'() {
 
         given:
         grailsApplication.config = new ConfigObject()
@@ -90,7 +90,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
     }
 
     @Unroll
-    def 'No authentication configured [configuration was #conf]'() {
+    void 'No authentication configured [configuration was #conf]'() {
 
         given:
         grailsApplication.config = conf
@@ -107,7 +107,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
     }
 
     @Unroll
-    def 'Configuration #conf overrides API URL to be #expectedUri'() {
+    void 'Configuration #conf overrides API URL to be #expectedUri'() {
 
         given:
         service.grailsApplication.config = conf
@@ -132,7 +132,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
 
     }
 
-    def 'connector can post attachments in the correct format'() {
+    void 'connector can post attachments in the correct format'() {
 
         given:
         File file = new File('src/test/groovy/true.png')
@@ -153,7 +153,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
 
     }
 
-    def 'send mail receives an exception'() {
+    void 'send mail receives an exception'() {
 
         setup:
         HTTPResponse mockResponse = Mock(HTTPResponse)
@@ -188,7 +188,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
 
     }
 
-    def 'send mail receives an exception when there is no response'() {
+    void 'send mail receives an exception when there is no response'() {
 
         setup:
         RESTClient.metaClass.post = { Map params, Closure closure ->

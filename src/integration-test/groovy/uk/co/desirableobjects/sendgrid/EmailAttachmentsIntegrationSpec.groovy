@@ -11,7 +11,7 @@ class EmailAttachmentsIntegrationSpec extends Specification {
     def grailsApplication
 
     @Ignore
-    def 'send an email with an attachment'() {
+    void 'send an email with an attachment'() {
 
         given:
             grailsApplication.config.sendgrid = [username: 'your-username', password: 'your-password']

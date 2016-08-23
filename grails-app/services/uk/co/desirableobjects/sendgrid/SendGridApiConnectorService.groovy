@@ -1,8 +1,10 @@
 package uk.co.desirableobjects.sendgrid
 
-import uk.co.desirableobjects.sendgrid.exception.SendGridCommunicationException
-import wslite.rest.*
 import uk.co.desirableobjects.sendgrid.exception.MissingCredentialsException
+import uk.co.desirableobjects.sendgrid.exception.SendGridCommunicationException
+import wslite.rest.RESTClient
+import wslite.rest.RESTClientException
+import wslite.rest.Response
 
 class SendGridApiConnectorService {
 
@@ -13,7 +15,7 @@ class SendGridApiConnectorService {
         String name
         byte[] content
 
-        void setContent(def raw) {
+        void setContent(raw) {
             if (raw instanceof byte[]) {
                 content = raw
             } else {
@@ -29,7 +31,7 @@ class SendGridApiConnectorService {
         Response response
         try {
             response = sendGrid.post(path: 'mail.send.json') {
-                prepareParameters(email).each { BodyPart part ->
+                for (BodyPart part in prepareParameters(email)) {
                     multipart part.name, part.content
                 }
             }
@@ -42,23 +44,25 @@ class SendGridApiConnectorService {
         return handle(response)
 
     }
-    
-    private SendGridResponse handle(def clientResponse) {
+
+    private SendGridResponse handle(clientResponse) {
 
         return SendGridResponse.parse(clientResponse)
 
     }
-    
+
     private List<BodyPart> prepareParameters(SendGridEmail email) {
 
         checkConfig(email)
 
         List<BodyPart> body = []
-        if(!email.username)
+        if(!email.username) {
             body << new BodyPart(name: 'api_user', content: grailsApplication.config.sendgrid?.username.bytes)
+        }
 
-        if(!email.password)
+        if(!email.password) {
             body << new BodyPart(name: 'api_key', content: grailsApplication.config.sendgrid?.password.bytes)
+        }
 
         email.toMap().each { String key, value ->
             if (value instanceof List<?>) {

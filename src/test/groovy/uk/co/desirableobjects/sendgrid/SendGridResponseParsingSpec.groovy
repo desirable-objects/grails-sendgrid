@@ -1,15 +1,16 @@
 package uk.co.desirableobjects.sendgrid
 
+import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 import wslite.http.HTTPRequest
 import wslite.http.HTTPResponse
 import wslite.rest.Response
 
-@Mixin(GrailsUnitTestMixin)
+@TestMixin(GrailsUnitTestMixin)
 class SendGridResponseParsingSpec extends Specification {
 
-    def 'Parse a success response'() {
+    void 'Parse a success response'() {
 
         given:
             Response response = Mock(Response, constructorArgs: [Mock(HTTPRequest), Mock(HTTPResponse)])
@@ -25,7 +26,7 @@ class SendGridResponseParsingSpec extends Specification {
 
     }
 
-    def 'Parse an error response'() {
+    void 'Parse an error response'() {
 
         given:
             Response response = Mock(Response, constructorArgs: [Mock(HTTPRequest), Mock(HTTPResponse)])
