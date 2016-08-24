@@ -1,33 +1,41 @@
 package uk.co.desirableobjects.sendgrid
 
+import grails.config.Config
+import grails.core.GrailsApplication
+import groovy.transform.CompileDynamic
+import groovy.transform.CompileStatic
 import uk.co.desirableobjects.sendgrid.exception.MissingCredentialsException
 import uk.co.desirableobjects.sendgrid.exception.SendGridCommunicationException
 import wslite.rest.RESTClient
 import wslite.rest.RESTClientException
 import wslite.rest.Response
 
+@CompileStatic
 class SendGridApiConnectorService {
 
     static transactional = false
-    def grailsApplication
 
-    class BodyPart {
+    GrailsApplication grailsApplication
+
+    @CompileStatic
+    static class BodyPart {
         String name
         byte[] content
 
         void setContent(raw) {
             if (raw instanceof byte[]) {
-                content = raw
+                content = (byte[]) raw
             } else {
-                content = raw.bytes
+                content = ((String) raw).bytes
             }
         }
 
     }
 
-    def post(SendGridEmail email) {
+    @CompileDynamic
+    SendGridResponse post(SendGridEmail email) {
 
-        RESTClient sendGrid = new RESTClient(grailsApplication.config.sendgrid?.api?.url ?: 'https://sendgrid.com/api/')
+        RESTClient sendGrid = new RESTClient(config.getProperty('sendgrid.api.url', String, 'https://sendgrid.com/api/'))
         Response response
         try {
             response = sendGrid.post(path: 'mail.send.json') {
@@ -57,16 +65,16 @@ class SendGridApiConnectorService {
 
         List<BodyPart> body = []
         if(!email.username) {
-            body << new BodyPart(name: 'api_user', content: grailsApplication.config.sendgrid?.username.bytes)
+            body << new BodyPart(name: 'api_user', content: config.getProperty('sendgrid.username', String).bytes)
         }
 
         if(!email.password) {
-            body << new BodyPart(name: 'api_key', content: grailsApplication.config.sendgrid?.password.bytes)
+            body << new BodyPart(name: 'api_key', content: config.getProperty('sendgrid.password', String).bytes)
         }
 
         email.toMap().each { String key, value ->
-            if (value instanceof List<?>) {
-                body.addAll(explode(key, value))
+            if (value instanceof List) {
+                body.addAll(explode(key, (List) value))
             } else {
                 body << new BodyPart(name: key, content: value)
             }
@@ -76,8 +84,8 @@ class SendGridApiConnectorService {
 
     }
 
-    private void checkConfig(email) {
-        if ((!grailsApplication.config.sendgrid.password || !grailsApplication.config.sendgrid.username) &&
+    private void checkConfig(SendGridEmail email) {
+        if ((!config.getProperty('sendgrid.password') || !config.getProperty('sendgrid.username')) &&
             (!email.username || !email.password)) {
             throw new MissingCredentialsException()
         }
@@ -91,4 +99,7 @@ class SendGridApiConnectorService {
 
     }
 
+    private Config getConfig() {
+        grailsApplication.config
+    }
 }

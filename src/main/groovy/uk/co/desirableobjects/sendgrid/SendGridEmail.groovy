@@ -1,8 +1,11 @@
 package uk.co.desirableobjects.sendgrid
 
 import grails.converters.JSON
+import groovy.transform.CompileDynamic
+import groovy.transform.CompileStatic
 import groovy.transform.ToString
 
+@CompileStatic
 @ToString
 class SendGridEmail {
 
@@ -43,6 +46,7 @@ class SendGridEmail {
         encodeParameters() + addAttachments()
     }
 
+    @CompileDynamic
     private Map<String, Object> encodeParameters() {
 
         Map<String, Object> parameters = [:]

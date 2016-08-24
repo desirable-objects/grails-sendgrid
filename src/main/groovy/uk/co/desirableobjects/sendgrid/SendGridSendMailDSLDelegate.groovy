@@ -1,9 +1,14 @@
 package uk.co.desirableobjects.sendgrid
 
+import groovy.transform.CompileDynamic
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class SendGridSendMailDSLDelegate {
 
     SendGridEmailBuilder builder = new SendGridEmailBuilder()
 
+    @CompileDynamic
     def methodMissing(String method, args) {
         return builder."$method"(*args)
     }
@@ -36,4 +41,7 @@ class SendGridSendMailDSLDelegate {
         return builder.addAttachment(filename, attachment)
     }
 
+    SendGridEmail build() {
+        builder.build()
+    }
 }

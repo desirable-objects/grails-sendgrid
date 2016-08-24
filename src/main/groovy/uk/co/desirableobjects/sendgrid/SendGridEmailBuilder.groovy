@@ -1,7 +1,9 @@
 package uk.co.desirableobjects.sendgrid
 
+import groovy.transform.CompileStatic
 import uk.co.desirableobjects.sendgrid.exception.InvalidEmailException
 
+@CompileStatic
 class SendGridEmailBuilder {
 
     private static final List<String> REQUIRED_PARAMETERS = ['to', 'subject', 'from']

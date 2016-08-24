@@ -1,5 +1,8 @@
 package uk.co.desirableobjects.sendgrid.exception
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class InvalidEmailException extends RuntimeException {
 
     InvalidEmailException(properties) {

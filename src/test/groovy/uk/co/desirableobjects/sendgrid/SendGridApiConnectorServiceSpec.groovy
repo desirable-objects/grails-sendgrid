@@ -1,6 +1,8 @@
 package uk.co.desirableobjects.sendgrid
 
+import grails.config.Config
 import grails.test.mixin.TestFor
+import org.grails.config.PropertySourcesConfig
 import org.springframework.beans.BeanUtils
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -18,7 +20,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
     private static final String USERNAME = 'antony'
     private static final String PASSWORD = 'password'
 
-    private static final LinkedHashMap DEFAULT_CREDENTIALS = [username: USERNAME, password: PASSWORD]
+    private static final Map DEFAULT_CREDENTIALS = [username: USERNAME, password: PASSWORD]
 
     private static Response mockResponse
     private static Map<String, Object> postData = [:]
@@ -50,7 +52,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
     void 'connector provides username and password to api from configuration'() {
 
         given:
-        grailsApplication.config.sendgrid = DEFAULT_CREDENTIALS
+        grailsApplication.config = configWithDefaultCredentials()
 
         and:
         mockResponse = Mock(Response, constructorArgs: [Mock(HTTPRequest), Mock(HTTPResponse)])
@@ -71,7 +73,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
     void 'connector provides username and password to api from email'() {
 
         given:
-        grailsApplication.config = new ConfigObject()
+        grailsApplication.config = new PropertySourcesConfig([:])
 
         and:
         mockResponse = Mock(Response, constructorArgs: [Mock(HTTPRequest), Mock(HTTPResponse)])
@@ -102,7 +104,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
         thrown MissingCredentialsException
 
         where:
-        conf << [new CustomConfigObject([:]), new CustomConfigObject([sendgrid: [:]]), new CustomConfigObject([sendgrid: [username: null]])]
+        conf << [new PropertySourcesConfig([:]), new PropertySourcesConfig([sendgrid: [:]]), new PropertySourcesConfig([sendgrid: [username: null]])]
 
     }
 
@@ -126,9 +128,9 @@ class SendGridApiConnectorServiceSpec extends Specification {
         apiUrl == expectedUri
 
         where:
-        conf                                                                                         | expectedUri
-        new CustomConfigObject([sendgrid: [:] + DEFAULT_CREDENTIALS])                                | 'https://sendgrid.com/api/'
-        new CustomConfigObject([sendgrid: [api: [url: 'http://example.net']] + DEFAULT_CREDENTIALS]) | 'http://example.net'
+        conf                                                                                            | expectedUri
+        new PropertySourcesConfig([sendgrid: [:] + DEFAULT_CREDENTIALS])                                | 'https://sendgrid.com/api/'
+        new PropertySourcesConfig([sendgrid: [api: [url: 'http://example.net']] + DEFAULT_CREDENTIALS]) | 'http://example.net'
 
     }
 
@@ -136,7 +138,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
 
         given:
         File file = new File('src/test/groovy/true.png')
-        grailsApplication.config.sendgrid = DEFAULT_CREDENTIALS
+        grailsApplication.config = configWithDefaultCredentials()
 
         and:
         mockResponse = Mock(Response, constructorArgs: [Mock(HTTPRequest), Mock(HTTPResponse)])
@@ -162,7 +164,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
         }
 
         and:
-        grailsApplication.config.sendgrid = DEFAULT_CREDENTIALS
+        grailsApplication.config = configWithDefaultCredentials()
 
         when:
         SendGridResponse sendGridResponse = service.post(new SendGridEmail())
@@ -196,7 +198,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
         }
 
         and:
-        grailsApplication.config.sendgrid = DEFAULT_CREDENTIALS
+        grailsApplication.config = configWithDefaultCredentials()
 
         when:
         service.post(new SendGridEmail())
@@ -209,12 +211,7 @@ class SendGridApiConnectorServiceSpec extends Specification {
 
     }
 
-    /**
-     * Customizes groovy's config object to construct one from a LinkedHashMap
-     */
-    static class CustomConfigObject extends ConfigObject {
-        CustomConfigObject(LinkedHashMap map) {
-            putAll(map)
-        }
+    private Config configWithDefaultCredentials() {
+        new PropertySourcesConfig(sendgrid: [:] + DEFAULT_CREDENTIALS)
     }
 }

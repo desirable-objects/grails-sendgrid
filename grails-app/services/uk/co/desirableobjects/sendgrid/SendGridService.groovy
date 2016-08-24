@@ -1,18 +1,21 @@
 package uk.co.desirableobjects.sendgrid
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class SendGridService {
 
     static transactional = false
 
     SendGridApiConnectorService sendGridApiConnectorService
 
-    def send(SendGridEmail email) {
+    SendGridResponse send(SendGridEmail email) {
 
         sendGridApiConnectorService.post(email)
 
     }
 
-    def sendMail(Closure closure) {
+    SendGridResponse sendMail(Closure closure) {
 
         SendGridSendMailDSLDelegate delegate = new SendGridSendMailDSLDelegate()
 
