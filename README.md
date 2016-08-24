@@ -17,7 +17,7 @@ Add the following dependencies in `build.gradle`
 ```
 dependencies {
 ...
-    compile 'desirableobjects.grails.plugins:grails-sendgrid:2.0'
+    compile 'desirableobjects.grails.plugins:grails-sendgrid:2.0.1'
 ...
 }
 ```
