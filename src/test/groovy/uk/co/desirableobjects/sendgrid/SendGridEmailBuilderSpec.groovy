@@ -27,7 +27,7 @@ class SendGridEmailBuilderSpec extends Specification {
         return new SendGridEmailBuilder().from(SENDER_EMAIL).to(RECIPIENT_EMAIL).subject(EXAMPLE_SUBJECT)
     }
 
-    def "Builder can build emails"() {
+    void "Builder can build emails"() {
 
         given:
             SendGridEmail email = createBuilder().withText(DEFAULT_TEXT_CONTENT).build()
@@ -50,7 +50,7 @@ class SendGridEmailBuilderSpec extends Specification {
     }
 
     @Unroll
-    def "Builder attempts to build invalid email combination #email"() {
+    void "Builder attempts to build invalid email combination #email"() {
 
         when:
             email.build()
@@ -67,7 +67,7 @@ class SendGridEmailBuilderSpec extends Specification {
 
     }
 
-    def 'Builder can take a recipient with a display name'() {
+    void 'Builder can take a recipient with a display name'() {
 
         given:
             SendGridEmailBuilder builder = new SendGridEmailBuilder().from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML)
@@ -92,7 +92,7 @@ class SendGridEmailBuilderSpec extends Specification {
 
     }
 
-    def 'Builder can take multiple recipients'() {
+    void 'Builder can take multiple recipients'() {
 
         given:
             SendGridEmailBuilder builder = new SendGridEmailBuilder().from(SENDER_EMAIL).subject(EXAMPLE_SUBJECT).withHtml(EXAMPLE_HTML)
@@ -121,7 +121,7 @@ class SendGridEmailBuilderSpec extends Specification {
 
     // TODO: Not enough names for recipients
 
-    def 'Builder can take a sender with a display name'() {
+    void 'Builder can take a sender with a display name'() {
 
         given:
             SendGridEmail email = createBuilder().withHtml(EXAMPLE_HTML).build()
@@ -145,7 +145,7 @@ class SendGridEmailBuilderSpec extends Specification {
 
     }
 
-    def 'Builder can add Bccs'() {
+    void 'Builder can add Bccs'() {
 
         given:
             SendGridEmail email = createBuilder().withText(DEFAULT_TEXT_CONTENT).addBcc(BCC_RECIPIENT).build()
@@ -153,7 +153,7 @@ class SendGridEmailBuilderSpec extends Specification {
         expect:
             email.bcc == [BCC_RECIPIENT]
             email.toMap().bcc == [BCC_RECIPIENT]
-        
+
         when:
             email = createBuilder().withText(DEFAULT_TEXT_CONTENT).addBcc(BCC_RECIPIENT).addBcc(ANOTHER_BCC_RECIPIENT).build()
 
@@ -163,7 +163,7 @@ class SendGridEmailBuilderSpec extends Specification {
 
     }
 
-    def 'Builder correctly translates optional parameters'() {
+    void 'Builder correctly translates optional parameters'() {
 
         given:
             Date sentDate = new Date()
@@ -182,7 +182,7 @@ class SendGridEmailBuilderSpec extends Specification {
 
     }
 
-    def 'Builder can add Headers'() {
+    void 'Builder can add Headers'() {
 
         given:
             SendGridEmail email = createBuilder().withText(DEFAULT_TEXT_CONTENT).addHeader('my-header', 'my-value').build()
@@ -200,7 +200,7 @@ class SendGridEmailBuilderSpec extends Specification {
 
     }
 
-    def 'Builder can add Custom handling instructions'() {
+    void 'Builder can add Custom handling instructions'() {
 
         given:
             SendGridEmail email = createBuilder().withText(DEFAULT_TEXT_CONTENT).addCustomHandlingInstruction('my-header', 'my-value').build()
@@ -218,7 +218,7 @@ class SendGridEmailBuilderSpec extends Specification {
 
     }
 
-    def 'Builder can add Custom handling instructions which are maps'() {
+    void 'Builder can add Custom handling instructions which are maps'() {
 
         given:
             SendGridEmail email = createBuilder().withText(DEFAULT_TEXT_CONTENT).addCustomHandlingInstruction('my-header', [peas:'pods']).build()
@@ -236,7 +236,7 @@ class SendGridEmailBuilderSpec extends Specification {
 
     }
 
-    def 'Builder can add attachments'() {
+    void 'Builder can add attachments'() {
 
         given:
             File file = loadFile('true.png')
@@ -258,17 +258,17 @@ class SendGridEmailBuilderSpec extends Specification {
 
     }
 
-    def 'Builder does not accept attachments with brackets in name'() {
+    void 'Builder does not accept attachments with brackets in name'() {
 
         when:
-            SendGridEmailBuilder emailBuilder = createBuilder().addAttachment('hi]', new File('.'))
+            createBuilder().addAttachment('hi]', new File('.'))
 
         then:
             IllegalArgumentException iae = thrown IllegalArgumentException
             iae.message == 'You cannot use square brackets in attachment filenames'
     }
 
-    def 'Builder can add sendgrid api credentials'() {
+    void 'Builder can add sendgrid api credentials'() {
 
         given:
             SendGridEmailBuilder emailBuilder = createBuilder()
@@ -280,11 +280,11 @@ class SendGridEmailBuilderSpec extends Specification {
 
         then:
             email.username == 'testuser'
-            email.password == 'testpassword'            
+            email.password == 'testpassword'
     }
 
     private File loadFile(String fileName) {
-        new File("src/test/groovy/${fileName}")
+        new File("src/test/groovy/", fileName)
     }
 
 }

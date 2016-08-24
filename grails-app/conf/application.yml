@@ -1,4 +1,3 @@
----
 grails:
     profile: web-plugin
     codegen:
