@@ -55,9 +55,7 @@ Sending Email
 
 In a pinch, you can send email using the SendGridService in one of two ways:
 
-* Using the sendMail closure from any class which has a reference to the SendGridService.
-
-As above, but referencing the sendMail method of the SendGridService directly:
+* Using the sendMail method of the SendGridService directly:
 
 ```groovy
 sendGridServicesendMail {
