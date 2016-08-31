@@ -53,14 +53,14 @@ Note that your @fixture@ controller must have the 'mail.send.json' action config
 Sending Email
 ----------
 
-In a pinch, you can send email using the SendGridService in one of three ways:
+In a pinch, you can send email using the SendGridService in one of two ways:
 
-* Using any controller's built-in sendMail method, and passing your email details to it.
+* Using the sendMail closure from any class which has a reference to the SendGridService.
 
- > Note: This is the grails-mail way of doing things, and should always be your preferred method to allow for quick and easy interchange of any grails-supported mail plugin.
+As above, but referencing the sendMail method of the SendGridService directly:
 
 ```groovy
-sendMail {
+sendGridServicesendMail {
      from 'antony@example.com'
      to 'aiten@example.net'
      to 'wirah@example.org'
@@ -70,17 +70,7 @@ sendMail {
 }
 ```
 
-* Using the sendMail closure from any class which has a reference to the SendGridService.
-
-As above, but referencing the sendMail method of the SendGridService directly:
-
-```groovy
-sendGridService.sendMail {
-    ...
-}
-```
-
-3* Using the email builder
+* Using the email builder
 
 This is useful when you might want a more programmatic approach to sending email.
 
