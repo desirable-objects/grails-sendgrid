@@ -85,6 +85,13 @@ class SendGridEmailBuilder {
         return this
     }
 
+    SendGridEmailBuilder addAttachment(String filename, String contentId, File file) {
+
+        addAttachment(filename, file)
+        email.contentIdForAttachments.put(filename, contentId)
+        return this
+    }
+
     SendGridEmail build() {
         validateRequiredParameters()
         return this.email

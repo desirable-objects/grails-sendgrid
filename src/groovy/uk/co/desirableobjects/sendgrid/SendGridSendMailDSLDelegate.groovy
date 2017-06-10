@@ -38,4 +38,8 @@ class SendGridSendMailDSLDelegate {
         return builder.addAttachment(filename, attachment)
     }
 
+    SendGridEmailBuilder attach(String filename, String contentId, File attachment) {
+        return builder.addAttachment(filename, contentId, attachment)
+    }
+
 }
