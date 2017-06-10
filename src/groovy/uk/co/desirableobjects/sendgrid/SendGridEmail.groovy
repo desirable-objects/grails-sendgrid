@@ -22,6 +22,7 @@ class SendGridEmail {
     Map headers = [:]
     Map customHandlingInstructions = [:]
     Map<String, File> attachments = [:]
+    Map<String, String> contentIdForAttachments = [:]
 
     private allParameters = [
             username: 'api_user',
@@ -46,6 +47,7 @@ class SendGridEmail {
 
         parameters.putAll(encodeParameters())
         parameters.putAll(addAttachments())
+        parameters.putAll(addContentIdForAttachments())
 
         return parameters
 
@@ -71,6 +73,16 @@ class SendGridEmail {
 
         attachments.each { String filename, File attachment ->
             parameters.put("files[${filename}]" as String, attachment.bytes)
+        }
+
+        return parameters
+    }
+
+    private Map<String, Object> addContentIdForAttachments() {
+        Map<String, Object> parameters = [:]
+
+        contentIdForAttachments.each { String filename, String contentId ->
+            parameters.put("content[${filename}]" as String, contentId)
         }
 
         return parameters
